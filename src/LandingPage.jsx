@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import Lenis from 'lenis';
 import heroVideo from './assets/Create_a_premium_cinematic_Saa.mp4';
 
-export default function LandingPage() {
+export default function LandingPage({ onLaunch }) {
   const threeContainerRef = useRef(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -166,10 +166,10 @@ export default function LandingPage() {
             </nav>
 
             <div className="flex items-center gap-3">
-                <a href="#"
+                <button onClick={onLaunch}
                     className="hidden lg:block text-sm font-semibold text-gray-600 hover:text-gray-900 transition-colors mr-2">Log
-                    in</a>
-                <button
+                    in</button>
+                <button onClick={onLaunch}
                     className="hidden md:flex creative-btn px-6 py-2.5 rounded-xl font-bold text-sm items-center justify-center hover:scale-105 transition-all">
                     Launch AI Campaign
                 </button>
@@ -188,8 +188,8 @@ export default function LandingPage() {
                 <a href="#" className="hover:text-primary transition-colors flex justify-between items-center pb-4 border-b border-gray-100">Pricing <span className="material-symbols-outlined text-gray-400">chevron_right</span></a>
                 
                 <div className="mt-4 flex flex-col gap-4">
-                    <button className="w-full py-3.5 rounded-xl font-bold text-gray-700 bg-gray-50 border border-gray-200">Log in</button>
-                    <button className="w-full creative-btn py-3.5 rounded-xl font-bold text-white shadow-md">Launch AI Campaign</button>
+                    <button onClick={onLaunch} className="w-full py-3.5 rounded-xl font-bold text-gray-700 bg-gray-50 border border-gray-200">Log in</button>
+                    <button onClick={onLaunch} className="w-full creative-btn py-3.5 rounded-xl font-bold text-white shadow-md">Launch AI Campaign</button>
                 </div>
             </nav>
         </div>
@@ -226,7 +226,7 @@ export default function LandingPage() {
 
                     <div className="flex flex-col sm:flex-row gap-4 mb-8 reveal justify-center"
                         style={{"transitionDelay":"200ms"}}>
-                        <button
+                        <button onClick={onLaunch}
                             className="creative-btn px-8 py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2 hover:scale-[1.02] transition-all">
                             Launch AI Campaign
                         </button>
@@ -870,7 +870,7 @@ export default function LandingPage() {
                         <p className="reveal font-body-lg text-body-lg text-on-tertiary/70 mb-xl">Join the world's most
                             innovative marketing teams and start scaling with precision today.</p>
                         <div className="reveal flex flex-col sm:flex-row gap-md justify-center">
-                            <button
+                            <button onClick={onLaunch}
                                 className="bg-primary text-on-primary px-xxl py-md rounded-xl font-headline-sm text-headline-sm hover:scale-105 transition-all">Launch
                                 AI Campaign</button>
                             <button
