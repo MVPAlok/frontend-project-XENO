@@ -989,7 +989,7 @@ export default function SettingsPage({
           {activeTab === 'ai' && (
             <div className="space-y-6 animate-in fade-in duration-300 text-left">
               <div>
-                <h3 className="text-sm font-bold text-gray-900 font-sans">AI Copilot Engine Configuration</h3>
+                <h3 className="text-sm font-bold text-gray-900 font-sans">Growth Studio Engine Configuration</h3>
                 <p className="text-[11px] text-gray-400 font-semibold mt-0.5">Control LLM models, set temperature parameters, restrict copywriting creativity, and verify explanation depth.</p>
               </div>
               

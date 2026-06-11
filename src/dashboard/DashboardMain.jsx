@@ -5,7 +5,7 @@ import TopHeader from './TopHeader';
 import DashboardOverview from './DashboardOverview';
 import CustomersPage from './CustomersPage';
 import SegmentsPage from './SegmentsPage';
-import AiCopilotPage from './AiCopilotPage';
+import GrowthStudioPage from './GrowthStudioPage';
 import CampaignsPage from './CampaignsPage';
 import AnalyticsPage from './AnalyticsPage';
 import CampaignActivityCenter from './ChannelSimulator';
@@ -628,7 +628,7 @@ export default function DashboardMain({ user, onBack }) {
         <TopHeader 
           user={user}
           onSearch={(val) => console.log('Searching for:', val)}
-          onOpenCopilot={() => navigate('/dashboard/copilot')}
+          onOpenGrowthStudio={() => navigate('/dashboard/growth-studio')}
           workspace={activeWorkspace}
           workspaces={workspaces}
           onSelectWorkspace={handleSelectWorkspace}
@@ -656,7 +656,7 @@ export default function DashboardMain({ user, onBack }) {
                   onNavigateToView={handleNavigateView}
                   onGenerateCampaign={(text) => {
                     setCopilotPrompt(text);
-                    navigate('/dashboard/copilot');
+                    navigate('/dashboard/growth-studio');
                   }}
                   kpis={kpis}
                   simMetrics={simMetrics}
@@ -676,7 +676,7 @@ export default function DashboardMain({ user, onBack }) {
                   onNavigateToView={handleNavigateView}
                   onGenerateCampaign={(text) => {
                     setCopilotPrompt(text);
-                    navigate('/dashboard/copilot');
+                    navigate('/dashboard/growth-studio');
                   }}
                   role={role}
                 />
@@ -701,7 +701,7 @@ export default function DashboardMain({ user, onBack }) {
                   onNavigateToView={handleNavigateView}
                   onGenerateCampaign={(text) => {
                     setCopilotPrompt(text);
-                    navigate('/dashboard/copilot');
+                    navigate('/dashboard/growth-studio');
                   }}
                   customers={customers}
                 />
@@ -709,9 +709,9 @@ export default function DashboardMain({ user, onBack }) {
             />
 
             <Route 
-              path="copilot" 
+              path="growth-studio" 
               element={
-                <AiCopilotPage 
+                <GrowthStudioPage 
                   initialPrompt={copilotPrompt}
                   onLaunchCampaign={handleLaunchNewCampaign}
                   role={role}

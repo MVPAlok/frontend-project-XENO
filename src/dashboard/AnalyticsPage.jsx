@@ -147,7 +147,7 @@ export default function AnalyticsPage({ campaigns = [] }) {
         {/* Visual node row */}
         <div className="flex flex-col lg:flex-row justify-between items-center gap-4 py-2 relative">
           {[
-            { label: '1. Campaign Launched', icon: 'rocket_launch', desc: 'AI Copilot deploys copy', color: 'text-indigo-650 bg-indigo-50/50 border-indigo-100' },
+            { label: '1. Campaign Launched', icon: 'rocket_launch', desc: 'Growth Studio deploys copy', color: 'text-indigo-650 bg-indigo-50/50 border-indigo-100' },
             { label: '2. Message Delivered', icon: 'mark_email_read', desc: 'Gateway confirmations', color: 'text-blue-600 bg-blue-50/50 border-blue-100' },
             { label: '3. Message Read', icon: 'visibility', desc: 'User open notification', color: 'text-amber-600 bg-amber-50/50 border-amber-100' },
             { label: '4. Link Clicked', icon: 'ads_click', desc: 'Redirects to store checkout', color: 'text-pink-600 bg-pink-50/50 border-pink-100' },

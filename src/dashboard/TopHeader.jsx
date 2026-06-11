@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 export default function TopHeader({ 
   user, 
   onSearch, 
-  onOpenCopilot, 
+  onOpenGrowthStudio, 
   workspace, 
   workspaces = [], 
   onSelectWorkspace, 
@@ -285,11 +285,11 @@ export default function TopHeader({
 
         {/* AI Assistant shortcut */}
         <button
-          onClick={onOpenCopilot}
+          onClick={onOpenGrowthStudio}
           className="premium-gradient-btn flex items-center gap-1.5 px-5 py-2.5 rounded-xl font-bold text-xs text-white shadow-[0_4px_14px_0_rgba(124,58,237,0.25)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_8px_20px_0_rgba(124,58,237,0.4)] active:scale-95"
         >
           <span className="material-symbols-outlined text-[16px] text-cyan-300 sparkle-pulse-icon">auto_awesome</span>
-          <span>Ask AI Copilot</span>
+          <span>Ask Growth Studio</span>
         </button>
 
         {/* Notifications Popover */}

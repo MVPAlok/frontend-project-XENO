@@ -11,7 +11,7 @@ const stages = [
   { id: 'approval', label: 'Launch Approval', icon: 'verified' }
 ];
 
-export default function AiCopilotPage({ initialPrompt, onLaunchCampaign, role = 'Admin' }) {
+export default function GrowthStudioPage({ initialPrompt, onLaunchCampaign, role = 'Admin' }) {
   const navigate = useNavigate();
   const [prompt, setPrompt] = useState(initialPrompt || '');
   const [successData, setSuccessData] = useState(null);
@@ -145,13 +145,13 @@ export default function AiCopilotPage({ initialPrompt, onLaunchCampaign, role = 
 
     onLaunchCampaign({
       id: generatedId,
-      name: `AI: ${editedTitle} Campaign`,
+      name: `Growth Studio: ${editedTitle} Campaign`,
       segment: audience,
       channel: result.channel,
       status: 'Running',
       message: editedMessage,
       targetSize: parseInt(result.audience),
-      createdBy: 'AI Copilot',
+      createdBy: 'Growth Studio',
       predictedRoi: result.audience.includes('324') ? '4.8x' : '6.2x',
       expectedRevenue: result.thoughtProcess.revenue,
       metrics: {
@@ -184,13 +184,13 @@ export default function AiCopilotPage({ initialPrompt, onLaunchCampaign, role = 
 
     onLaunchCampaign({
       id: generatedId,
-      name: `AI: ${editedTitle} Campaign`,
+      name: `Growth Studio: ${editedTitle} Campaign`,
       segment: audience,
       channel: result.channel,
       status: 'Scheduled',
       message: editedMessage,
       targetSize: parseInt(result.audience),
-      createdBy: 'AI Copilot',
+      createdBy: 'Growth Studio',
       predictedRoi: result.audience.includes('324') ? '4.8x' : '6.2x',
       expectedRevenue: result.thoughtProcess.revenue,
       metrics: { sent: 0, delivered: 0, read: 0, clicked: 0, converted: 0, revenue: 0 }
@@ -216,13 +216,13 @@ export default function AiCopilotPage({ initialPrompt, onLaunchCampaign, role = 
 
     onLaunchCampaign({
       id: generatedId,
-      name: `AI: ${editedTitle} (Draft)`,
+      name: `Growth Studio: ${editedTitle} (Draft)`,
       segment: audience,
       channel: result.channel,
       status: 'Draft',
       message: editedMessage,
       targetSize: parseInt(result.audience),
-      createdBy: 'AI Copilot',
+      createdBy: 'Growth Studio',
       predictedRoi: result.audience.includes('324') ? '4.8x' : '6.2x',
       expectedRevenue: result.thoughtProcess.revenue,
       metrics: { sent: 0, delivered: 0, read: 0, clicked: 0, converted: 0, revenue: 0 }
@@ -241,7 +241,7 @@ export default function AiCopilotPage({ initialPrompt, onLaunchCampaign, role = 
     <div className="max-w-4xl mx-auto space-y-6 animate-in fade-in duration-300">
       {/* Header */}
       <div className="text-left">
-        <h2 className="text-xl font-bold text-gray-950">AI Copilot Workbench</h2>
+        <h2 className="text-xl font-bold text-gray-950">Growth Studio Workbench</h2>
         <p className="text-xs text-gray-400 font-semibold mt-0.5">Describe your marketing goal in plain text and Xeno AI will model segments, copywrite, and recommend optimal channels.</p>
       </div>
 
@@ -378,7 +378,7 @@ export default function AiCopilotPage({ initialPrompt, onLaunchCampaign, role = 
               {/* Message Content */}
               <div className="text-left">
                 <div className="flex justify-between items-center mb-2">
-                  <span className="block text-[9px] font-bold text-gray-400 uppercase tracking-wider">AI Copilot Dispatch Copy</span>
+                  <span className="block text-[9px] font-bold text-gray-400 uppercase tracking-wider">Growth Studio Campaign Copy</span>
                   <button
                     onClick={() => setIsEditing(!isEditing)}
                     className="text-[10px] font-bold text-indigo-650 hover:underline flex items-center gap-0.5"
@@ -544,7 +544,7 @@ export default function AiCopilotPage({ initialPrompt, onLaunchCampaign, role = 
             <div className="space-y-2">
               <h3 className="text-lg font-bold text-gray-955">Campaign {successData.action}</h3>
               <p className="text-xs text-gray-400 font-semibold leading-relaxed">
-                Your AI Copilot campaign proposal has been successfully registered and active in the console lifecycle.
+                Your Growth Studio campaign proposal has been successfully registered and active in the console lifecycle.
               </p>
             </div>
 

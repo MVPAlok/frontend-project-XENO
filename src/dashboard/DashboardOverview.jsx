@@ -68,7 +68,7 @@ export default function DashboardOverview({
       insight: '+1.2% over weekly avg',
       confidence: '96% Confirmed',
       actionLabel: 'Funnel view',
-      actionView: 'copilot'
+      actionView: 'growth-studio'
     },
     'Avg Customer CLV': {
       icon: 'stars',
@@ -596,7 +596,7 @@ export default function DashboardOverview({
                       Campaign <strong className="text-gray-700">"{campaigns[0].name}"</strong> launched successfully targeting <strong className="text-gray-700">{campaigns[0].segment}</strong>.
                     </span>
                   ) : (
-                    "No campaign has been launched yet. Trigger one from the AI Copilot."
+                    "No campaign has been launched yet. Trigger one from the Growth Studio."
                   )}
                 </p>
                 <span className="text-[9px] text-gray-400 font-bold block mt-1">

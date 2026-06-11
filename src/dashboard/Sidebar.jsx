@@ -14,7 +14,7 @@ export default function Sidebar({
     { id: 'insights', label: 'AI Insights', icon: 'psychology', badge: unreadNotificationCount },
     { id: 'customers', label: 'Customers', icon: 'group' },
     { id: 'segments', label: 'Segments', icon: 'target' },
-    { id: 'copilot', label: 'AI Copilot', icon: 'smart_toy' },
+    { id: 'growth-studio', label: 'Growth Studio', icon: 'smart_toy' },
     { id: 'campaigns', label: 'Campaigns', icon: 'campaign' },
     { id: 'analytics', label: 'Analytics', icon: 'monitoring' },
     { id: 'simulator', label: 'Activity Center', icon: 'dns' },
