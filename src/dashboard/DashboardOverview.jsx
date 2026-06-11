@@ -5,7 +5,12 @@ export default function DashboardOverview({
   onNavigateToView, 
   onGenerateCampaign, 
   kpis = dashboardKPIs,
-  simMetrics = { sent: 1089, delivered: 1046, failed: 43, read: 892, clicked: 182, converted: 88 } 
+  simMetrics = { sent: 1089, delivered: 1046, failed: 43, read: 892, clicked: 182, converted: 88 },
+  workspace,
+  timestamps = { lastAnalysis: 'Just Now', lastUpload: 'Just Now', lastRefresh: 'Just Now' },
+  logs = [],
+  campaigns = [],
+  role = 'Admin'
 }) {
   const [activeSegment, setActiveSegment] = useState(mockSegments[0]);
   const [hoveredNode, setHoveredNode] = useState(null);
@@ -87,6 +92,53 @@ export default function DashboardOverview({
 
   return (
     <div className="space-y-10 animate-in fade-in duration-500 pb-12 select-none">
+      
+      {/* Workspace Health & Status Bar */}
+      <div className="flex flex-wrap items-center justify-between gap-4 bg-white/70 border border-gray-200/50 rounded-[2rem] px-8 py-3.5 shadow-sm backdrop-blur-md">
+        <div className="flex items-center gap-2.5">
+          <span className="material-symbols-outlined text-[18px] text-indigo-500">storefront</span>
+          <span className="text-[11px] font-bold text-gray-850">Workspace: <strong className="text-indigo-950 font-extrabold">{workspace?.brandName || 'Apex Cosmetics'}</strong></span>
+        </div>
+        <div className="h-4 w-[1px] bg-gray-200 hidden md:block" />
+        
+        <div className="flex items-center gap-2.5">
+          <span className="material-symbols-outlined text-[18px] text-gray-400">psychology</span>
+          <span className="text-[11px] font-bold text-gray-500">Last Analysis: <strong className="text-gray-800">{timestamps.lastAnalysis || 'Just Now'}</strong></span>
+        </div>
+        <div className="h-4 w-[1px] bg-gray-200 hidden md:block" />
+
+        <div className="flex items-center gap-2.5">
+          <span className="material-symbols-outlined text-[18px] text-gray-400">cloud_upload</span>
+          <span className="text-[11px] font-bold text-gray-500">Last Dataset Upload: <strong className="text-gray-800">{timestamps.lastUpload || 'Just Now'}</strong></span>
+        </div>
+        <div className="h-4 w-[1px] bg-gray-200 hidden md:block" />
+
+        <div className="flex items-center gap-2.5">
+          <span className="material-symbols-outlined text-[18px] text-gray-400">group</span>
+          <span className="text-[11px] font-bold text-gray-500">Customers: <strong className="text-gray-800">{workspace?.stats?.customers || '25,432'}</strong></span>
+        </div>
+        <div className="h-4 w-[1px] bg-gray-200 hidden md:block" />
+
+        <div className="flex items-center gap-2.5">
+          <span className="material-symbols-outlined text-[18px] text-gray-400">payments</span>
+          <span className="text-[11px] font-bold text-gray-500">Orders: <strong className="text-gray-800">{workspace?.stats?.orders || '58,201'}</strong></span>
+        </div>
+        <div className="h-4 w-[1px] bg-gray-200 hidden md:block" />
+
+        <div className="flex items-center gap-2">
+          <span className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+          </span>
+          <span className="text-[11px] font-bold text-emerald-800 uppercase tracking-wider">AI: Active</span>
+        </div>
+        <div className="h-4 w-[1px] bg-gray-200 hidden md:block" />
+
+        <div className="flex items-center gap-2.5">
+          <span className="material-symbols-outlined text-[18px] text-gray-400">schedule</span>
+          <span className="text-[11px] font-bold text-gray-500">Freshness: <strong className="text-gray-800">{timestamps.lastRefresh || 'Updated 12 mins ago'}</strong></span>
+        </div>
+      </div>
       
       {/* 1. AI MISSION CONTROL HERO PANEL */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
@@ -344,161 +396,321 @@ export default function DashboardOverview({
         })}
       </div>
 
-      {/* 3. AI OPPORTUNITIES (Clean minimal cards) */}
+      {/* 3. AI PRIORITY ACTIONS */}
       <div>
         <div className="flex items-center justify-between mb-6 mt-8">
           <div className="flex items-center gap-2">
-            <span className="material-symbols-outlined text-indigo-600 text-[24px]">polyline</span>
-            <h2 className="text-xl font-bold text-gray-900 tracking-tight">Active Opportunities</h2>
+            <span className="material-symbols-outlined text-indigo-650 text-[24px]">auto_awesome</span>
+            <h2 className="text-xl font-bold text-gray-900 tracking-tight">AI Priority Actions</h2>
           </div>
-          <span className="text-[11px] text-gray-800 font-bold bg-gray-50 px-3 py-1.5 rounded-full">
-            Portfolio Potential: ₹2,15,000
+          <span className="text-[11px] text-gray-805 font-bold bg-indigo-50 border border-indigo-100 text-indigo-700 px-3 py-1.5 rounded-full">
+            Recoverable Portfolio Potential: ₹2,90,000
           </span>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 relative z-10">
-          {/* Card 1: Recover Revenue */}
+          {/* Card 1: Launch Win-Back Campaign */}
           <div className="bg-white p-6 rounded-[2rem] shadow-[0_8px_30px_rgba(0,0,0,0.04)] hover:shadow-[0_12px_40px_rgba(0,0,0,0.08)] transition-all duration-300 flex flex-col justify-between premium-hover-lift hover-shadow-orange group/opp relative overflow-hidden">
-            {/* Embedded Faded SVG Illustration (Shopping Bags) */}
-            <svg className="absolute -bottom-2 -right-2 w-28 h-28 opacity-[0.03] group-hover/opp:opacity-[0.08] pointer-events-none select-none text-amber-500 z-0 transition-all duration-500 group-hover/opp:scale-110" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M25 40 H75 V85 C75 87.76 72.76 90 70 90 H30 C27.24 90 25 87.76 25 85 V40 Z" stroke="currentColor" strokeWidth="4" strokeLinejoin="round" />
-              <path d="M38 40 V30 C38 23.37 43.37 18 50 18 C56.63 18 62 23.37 62 30 V40" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
-              <path d="M42 55 H58 M50 47 V63" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
-            </svg>
-
+            <div className="absolute inset-0 bg-gradient-to-br from-amber-50/0 to-amber-50/0 group-hover/opp:from-amber-50/20 group-hover/opp:to-transparent transition-all duration-500 z-0 pointer-events-none" />
+            
             <div className="relative z-10 flex justify-between items-start mb-5">
-              <span className="text-[10px] font-bold text-amber-700 bg-amber-50/80 px-2.5 py-1 rounded-md uppercase tracking-wider group-hover/opp:bg-amber-100 transition-colors">
-                REVENUE RECOVERY
+              <span className="text-[10px] font-bold text-amber-700 bg-amber-50/80 px-2.5 py-1 rounded-md uppercase tracking-wider">
+                🔥 HIGH PRIORITY
               </span>
-              <span className="text-[11px] font-bold text-gray-800 bg-gray-100 px-2.5 py-1 rounded-md transition-colors group-hover/opp:bg-gray-200">
-                4.8x ROI
+              <span className="text-[11px] font-bold text-gray-800 bg-gray-100 px-2.5 py-1 rounded-md">
+                94% Confidence
               </span>
             </div>
             
-            <div className="relative z-10 mb-8">
-              <h3 className="text-lg font-bold text-gray-900 mb-1 group-hover/opp:text-indigo-900 transition-colors">Recover Revenue</h3>
-              <p className="text-xs text-gray-400 font-semibold">Targeting 324 inactive shoppers</p>
+            <div className="relative z-10 mb-6">
+              <h3 className="text-lg font-bold text-gray-900 mb-1">Launch Win-Back Campaign</h3>
+              <p className="text-xs text-gray-400 font-semibold">Targeting 324 inactive customers who haven't purchased in over 90 days.</p>
             </div>
 
-            <div className="relative z-10 flex items-center justify-between mb-8">
-              <div className="overflow-hidden h-[45px] relative">
-                <span className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Opportunity Value</span>
-                <span className="text-3xl font-bold text-gray-900 absolute left-0 bottom-0 group-hover/opp:-translate-y-8 group-hover/opp:opacity-0 transition-all duration-300">₹1,20,000</span>
-                <span className="text-3xl font-bold text-indigo-700 absolute left-0 bottom-0 translate-y-8 opacity-0 group-hover/opp:translate-y-0 group-hover/opp:opacity-100 transition-all duration-300">₹1,20,000</span>
+            <div className="relative z-10 flex items-center justify-between mb-6">
+              <div>
+                <span className="block text-[8px] font-bold text-gray-400 uppercase tracking-widest mb-0.5">Recoverable Revenue</span>
+                <span className="text-2xl font-black text-gray-900">₹1,20,000</span>
               </div>
-              <div className="relative w-12 h-12 shrink-0 group-hover/opp:scale-110 transition-transform duration-500">
-                <svg className="w-full h-full -rotate-90" viewBox="0 0 36 36">
-                  <path className="text-gray-100" strokeWidth="3" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                  <path className="text-indigo-600 transition-all duration-1000 ease-out opacity-50 group-hover/opp:opacity-100" strokeDasharray="92, 100" strokeWidth="3" strokeLinecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                </svg>
-                <div className="absolute inset-0 flex items-center justify-center text-[11px] font-bold text-gray-900">92%</div>
+              <div className="text-right">
+                <span className="block text-[8px] font-bold text-gray-400 uppercase tracking-widest mb-0.5">Est. ROI</span>
+                <span className="text-xs font-bold text-amber-600 block mt-1">4.8x Expected</span>
               </div>
             </div>
 
             <button
               onClick={handleGenerateWinback}
-              className="relative z-10 w-full py-3 border border-indigo-100 hover:bg-indigo-50/50 text-indigo-600 font-bold text-[13px] rounded-xl transition-all duration-300 group-hover/opp:shadow-[0_0_15px_rgba(79,70,229,0.2)] group-hover/opp:border-indigo-300 group-hover/opp:bg-indigo-50"
+              disabled={role === 'Viewer'}
+              className="relative z-10 w-full py-3 bg-amber-550 hover:bg-amber-650 disabled:opacity-50 text-white font-bold text-xs rounded-xl transition-all shadow-md active:scale-95"
             >
-              Configure Win-Back
+              Launch Win-Back Campaign
             </button>
           </div>
 
-          {/* Card 2: VIP Expansion */}
+          {/* Card 2: Churn Risk Detected */}
           <div className="bg-white p-6 rounded-[2rem] shadow-[0_8px_30px_rgba(0,0,0,0.04)] hover:shadow-[0_12px_40px_rgba(0,0,0,0.08)] transition-all duration-300 flex flex-col justify-between premium-hover-lift hover-shadow-purple group/opp relative overflow-hidden">
-            {/* Embedded Faded SVG Illustration (Premium Crown) */}
-            <svg className="absolute -bottom-2 -right-2 w-28 h-28 opacity-[0.03] group-hover/opp:opacity-[0.08] pointer-events-none select-none text-purple-500 z-0 transition-all duration-500 group-hover/opp:scale-110" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M15 75 L22 30 L40 50 L50 20 L60 50 L78 30 L85 75 H15 Z" stroke="currentColor" strokeWidth="4" strokeLinejoin="round" />
-              <path d="M10 82 H90" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
-              <circle cx="22" cy="28" r="4" fill="currentColor" />
-              <circle cx="50" cy="18" r="4" fill="currentColor" />
-              <circle cx="78" cy="28" r="4" fill="currentColor" />
-            </svg>
+            <div className="absolute inset-0 bg-gradient-to-br from-rose-50/0 to-rose-50/0 group-hover/opp:from-rose-50/20 group-hover/opp:to-transparent transition-all duration-500 z-0 pointer-events-none" />
 
             <div className="relative z-10 flex justify-between items-start mb-5">
-              <span className="text-[10px] font-bold text-purple-700 bg-purple-50 px-2.5 py-1 rounded-md uppercase tracking-wider group-hover/opp:bg-purple-100 transition-colors">
-                COHORT EXPANSION
+              <span className="text-[10px] font-bold text-rose-750 bg-rose-50 px-2.5 py-1 rounded-md uppercase tracking-wider">
+                ⚠ CHURN RISK DETECTED
               </span>
-              <span className="text-[11px] font-bold text-gray-800 bg-gray-100 px-2.5 py-1 rounded-md transition-colors group-hover/opp:bg-gray-200">
-                6.2x ROI
+              <span className="text-[11px] font-bold text-gray-800 bg-gray-100 px-2.5 py-1 rounded-md">
+                82% Confidence
               </span>
             </div>
             
-            <div className="relative z-10 mb-8">
-              <h3 className="text-lg font-bold text-gray-900 mb-1 group-hover/opp:text-purple-900 transition-colors">VIP Expansion</h3>
-              <p className="text-xs text-gray-400 font-semibold">Targeting 150 top VIP shoppers</p>
+            <div className="relative z-10 mb-6">
+              <h3 className="text-lg font-bold text-gray-900 mb-1">Retention Campaign</h3>
+              <p className="text-xs text-gray-400 font-semibold">Targeting 185 at-risk customers whose frequency dropped 45%.</p>
             </div>
 
-            <div className="relative z-10 flex items-center justify-between mb-8">
-              <div className="overflow-hidden h-[45px] relative">
-                <span className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Opportunity Value</span>
-                <span className="text-3xl font-bold text-gray-900 absolute left-0 bottom-0 group-hover/opp:-translate-y-8 group-hover/opp:opacity-0 transition-all duration-300">₹75,000</span>
-                <span className="text-3xl font-bold text-purple-700 absolute left-0 bottom-0 translate-y-8 opacity-0 group-hover/opp:translate-y-0 group-hover/opp:opacity-100 transition-all duration-300">₹75,000</span>
+            <div className="relative z-10 flex items-center justify-between mb-6">
+              <div>
+                <span className="block text-[8px] font-bold text-gray-400 uppercase tracking-widest mb-0.5">Potential Rev Loss</span>
+                <span className="text-2xl font-black text-rose-600">₹95,000</span>
               </div>
-              <div className="relative w-12 h-12 shrink-0 group-hover/opp:scale-110 transition-transform duration-500">
-                <svg className="w-full h-full -rotate-90" viewBox="0 0 36 36">
-                  <path className="text-gray-100" strokeWidth="3" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                  <path className="text-purple-600 transition-all duration-1000 ease-out opacity-50 group-hover/opp:opacity-100" strokeDasharray="89, 100" strokeWidth="3" strokeLinecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                </svg>
-                <div className="absolute inset-0 flex items-center justify-center text-[11px] font-bold text-gray-900">89%</div>
+              <div className="text-right">
+                <span className="block text-[8px] font-bold text-gray-400 uppercase tracking-widest mb-0.5">Preferred Channel</span>
+                <span className="text-xs font-bold text-rose-700 block mt-1">WhatsApp/Email</span>
+              </div>
+            </div>
+
+            <button
+              onClick={() => onGenerateCampaign("Draft a high-converting retention campaign for 185 at-risk customers.")}
+              disabled={role === 'Viewer'}
+              className="relative z-10 w-full py-3 bg-indigo-650 hover:bg-indigo-800 disabled:opacity-50 text-white font-bold text-xs rounded-xl transition-all shadow-md active:scale-95"
+            >
+              Create Retention Campaign
+            </button>
+          </div>
+
+          {/* Card 3: VIP Opportunity */}
+          <div className="bg-white p-6 rounded-[2rem] shadow-[0_8px_30px_rgba(0,0,0,0.04)] hover:shadow-[0_12px_40px_rgba(0,0,0,0.08)] transition-all duration-300 flex flex-col justify-between premium-hover-lift hover-shadow-blue group/opp relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-purple-50/0 to-purple-50/0 group-hover/opp:from-purple-50/20 group-hover/opp:to-transparent transition-all duration-500 z-0 pointer-events-none" />
+
+            <div className="relative z-10 flex justify-between items-start mb-5">
+              <span className="text-[10px] font-bold text-purple-700 bg-purple-50 px-2.5 py-1 rounded-md uppercase tracking-wider">
+                📈 VIP UPSELL
+              </span>
+              <span className="text-[11px] font-bold text-gray-800 bg-gray-100 px-2.5 py-1 rounded-md">
+                98% Confidence
+              </span>
+            </div>
+            
+            <div className="relative z-10 mb-6">
+              <h3 className="text-lg font-bold text-gray-900 mb-1">VIP Opportunity</h3>
+              <p className="text-xs text-gray-400 font-semibold">Targeting 150 top customers spending over ₹10,000 recently.</p>
+            </div>
+
+            <div className="relative z-10 flex items-center justify-between mb-6">
+              <div>
+                <span className="block text-[8px] font-bold text-gray-400 uppercase tracking-widest mb-0.5">Uplift Value</span>
+                <span className="text-2xl font-black text-purple-750">₹75,000</span>
+              </div>
+              <div className="text-right">
+                <span className="block text-[8px] font-bold text-gray-400 uppercase tracking-widest mb-0.5">Est. ROI</span>
+                <span className="text-xs font-bold text-purple-650 block mt-1">6.2x Expected</span>
               </div>
             </div>
 
             <button
               onClick={handleGenerateVIP}
-              className="relative z-10 w-full py-3 border border-indigo-100 hover:bg-purple-50/50 text-indigo-600 font-bold text-[13px] rounded-xl transition-all duration-300 group-hover/opp:shadow-[0_0_15px_rgba(168,85,247,0.2)] group-hover/opp:border-purple-300 group-hover/opp:bg-purple-50 group-hover/opp:text-purple-700"
+              disabled={role === 'Viewer'}
+              className="relative z-10 w-full py-3 bg-purple-650 hover:bg-purple-800 disabled:opacity-50 text-white font-bold text-xs rounded-xl transition-all shadow-md active:scale-95"
             >
-              Unlock VIP Rewards
-            </button>
-          </div>
-
-          {/* Card 3: Channel Optimization */}
-          <div className="bg-white p-6 rounded-[2rem] shadow-[0_8px_30px_rgba(0,0,0,0.04)] hover:shadow-[0_12px_40px_rgba(0,0,0,0.08)] transition-all duration-300 flex flex-col justify-between premium-hover-lift hover-shadow-blue group/opp relative overflow-hidden">
-            {/* Embedded Faded SVG Illustration (Communication Network) */}
-            <svg className="absolute -bottom-2 -right-2 w-28 h-28 opacity-[0.03] group-hover/opp:opacity-[0.08] pointer-events-none select-none text-cyan-500 z-0 transition-all duration-500 group-hover/opp:scale-110" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M20 30 H60 V60 H30 L15 70 V30 Z" stroke="currentColor" strokeWidth="4" strokeLinejoin="round" />
-              <path d="M80 40 V65 L70 75 H50 V60" stroke="currentColor" strokeWidth="3" strokeLinejoin="round" strokeDasharray="3 3" />
-              <circle cx="30" cy="45" r="3" fill="currentColor" />
-              <circle cx="40" cy="45" r="3" fill="currentColor" />
-              <circle cx="50" cy="45" r="3" fill="currentColor" />
-            </svg>
-
-            <div className="relative z-10 flex justify-between items-start mb-5">
-              <span className="text-[10px] font-bold text-cyan-700 bg-cyan-50 px-2.5 py-1 rounded-md uppercase tracking-wider group-hover/opp:bg-cyan-100 transition-colors">
-                OPTIMIZATION INSIGHT
-              </span>
-              <span className="text-[11px] font-bold text-gray-800 bg-gray-100 px-2.5 py-1 rounded-md transition-colors group-hover/opp:bg-gray-200">
-                5.5x ROI
-              </span>
-            </div>
-            
-            <div className="relative z-10 mb-8">
-              <h3 className="text-lg font-bold text-gray-900 mb-1 group-hover/opp:text-cyan-900 transition-colors">Channel Optimization</h3>
-              <p className="text-xs text-gray-400 font-semibold">Route from SMS/Email to WhatsApp</p>
-            </div>
-
-            <div className="relative z-10 flex items-center justify-between mb-8">
-              <div className="overflow-hidden h-[45px] relative">
-                <span className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Conversion Lift</span>
-                <span className="text-3xl font-bold text-gray-900 absolute left-0 bottom-0 group-hover/opp:-translate-y-8 group-hover/opp:opacity-0 transition-all duration-300">+18% Lift</span>
-                <span className="text-3xl font-bold text-cyan-600 absolute left-0 bottom-0 translate-y-8 opacity-0 group-hover/opp:translate-y-0 group-hover/opp:opacity-100 transition-all duration-300">+18% Lift</span>
-              </div>
-              <div className="relative w-12 h-12 shrink-0 group-hover/opp:scale-110 transition-transform duration-500">
-                <svg className="w-full h-full -rotate-90" viewBox="0 0 36 36">
-                  <path className="text-gray-100" strokeWidth="3" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                  <path className="text-slate-800 transition-all duration-1000 ease-out opacity-50 group-hover/opp:opacity-100 group-hover/opp:text-cyan-500" strokeDasharray="94, 100" strokeWidth="3" strokeLinecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                </svg>
-                <div className="absolute inset-0 flex items-center justify-center text-[11px] font-bold text-gray-900">94%</div>
-              </div>
-            </div>
-
-            <button
-              onClick={() => onNavigateToView('copilot')}
-              className="relative z-10 w-full py-3 border border-cyan-100 hover:bg-cyan-50/50 text-cyan-600 font-bold text-[13px] rounded-xl transition-all duration-300 group-hover/opp:shadow-[0_0_15px_rgba(6,182,212,0.2)] group-hover/opp:border-cyan-300 group-hover/opp:bg-cyan-50"
-            >
-              Analyze Conversion Funnel
+              Generate VIP Campaign
             </button>
           </div>
         </div>
+      </div>
+
+      {/* 3.5. AI SYSTEM COMMAND CENTER & LEARNING LOOP */}
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 relative z-10">
+        
+        {/* Left Card: System Activity Command Center */}
+        <div className="bg-white/70 backdrop-blur-xl border border-gray-200/60 p-8 rounded-[2.5rem] shadow-sm relative overflow-hidden flex flex-col justify-between">
+          <div className="absolute inset-0 bg-dot-pattern opacity-[0.3] pointer-events-none" />
+          
+          <div className="mb-6">
+            <h3 className="text-sm font-bold text-gray-905 flex items-center gap-2">
+              <span className="material-symbols-outlined text-indigo-500 text-[18px]">terminal</span>
+              System Command Feed
+            </h3>
+            <p className="text-[11px] text-gray-400 font-semibold">Real-time workspace activity logs and AI operations.</p>
+          </div>
+
+          <div className="space-y-4 flex-1">
+            {/* 1. Recent Upload Activity */}
+            <div className="flex items-start gap-3.5 border-b border-gray-100 pb-3">
+              <div className="p-2 bg-blue-50 border border-blue-100 rounded-xl text-blue-600 shrink-0">
+                <span className="material-symbols-outlined text-[16px] block">upload_file</span>
+              </div>
+              <div className="text-xs text-left">
+                <p className="font-bold text-gray-800">Recent Data Ingestion</p>
+                <p className="text-gray-500 font-semibold mt-0.5">
+                  Imported <strong className="text-gray-700">customers.csv</strong> (25,432 profiles) & <strong className="text-gray-700">orders.csv</strong> (58,201 logs).
+                </p>
+                <span className="text-[9px] text-gray-400 font-bold block mt-1">Status: Validated & Ingested</span>
+              </div>
+            </div>
+
+            {/* 2. Latest AI Analysis */}
+            <div className="flex items-start gap-3.5 border-b border-gray-100 pb-3">
+              <div className="p-2 bg-purple-50 border border-purple-100 rounded-xl text-purple-600 shrink-0">
+                <span className="material-symbols-outlined text-[16px] block">psychology</span>
+              </div>
+              <div className="text-xs text-left">
+                <p className="font-bold text-gray-800">Latest AI Analysis Run</p>
+                <p className="text-gray-500 font-semibold mt-0.5">
+                  Calculated CLV and purchase intervals for 25k+ profiles. 6 segments generated.
+                </p>
+                <span className="text-[9px] text-gray-400 font-bold block mt-1">Status: Optimized Today</span>
+              </div>
+            </div>
+
+            {/* 3. Newest Segment Created */}
+            <div className="flex items-start gap-3.5 border-b border-gray-100 pb-3">
+              <div className="p-2 bg-amber-50 border border-amber-100 rounded-xl text-amber-600 shrink-0">
+                <span className="material-symbols-outlined text-[16px] block">target</span>
+              </div>
+              <div className="text-xs text-left">
+                <p className="font-bold text-gray-800">Newest Created Segment</p>
+                <p className="text-gray-500 font-semibold mt-0.5">
+                  <strong className="text-amber-700">Inactive Customers</strong> (324 customers, ₹1,20,000 potential recoverable revenue).
+                </p>
+                <span className="text-[9px] text-gray-400 font-bold block mt-1">Status: Ready to Target</span>
+              </div>
+            </div>
+
+            {/* 4. Latest Campaign Launched */}
+            <div className="flex items-start gap-3.5 border-b border-gray-100 pb-3">
+              <div className="p-2 bg-pink-50 border border-pink-100 rounded-xl text-pink-600 shrink-0">
+                <span className="material-symbols-outlined text-[16px] block">rocket_launch</span>
+              </div>
+              <div className="text-xs text-left">
+                <p className="font-bold text-gray-800">Latest Launched Campaign</p>
+                <p className="text-gray-500 font-semibold mt-0.5">
+                  {campaigns.length > 0 ? (
+                    <span>
+                      Campaign <strong className="text-gray-700">"{campaigns[0].name}"</strong> launched successfully targeting <strong className="text-gray-700">{campaigns[0].segment}</strong>.
+                    </span>
+                  ) : (
+                    "No campaign has been launched yet. Trigger one from the AI Copilot."
+                  )}
+                </p>
+                <span className="text-[9px] text-gray-400 font-bold block mt-1">
+                  Created by: {campaigns.length > 0 ? campaigns[0].createdBy : 'N/A'}
+                </span>
+              </div>
+            </div>
+
+            {/* 5. Latest Conversion Event */}
+            <div className="flex items-start gap-3.5">
+              <div className="p-2 bg-emerald-50 border border-emerald-100 rounded-xl text-emerald-650 shrink-0">
+                <span className="material-symbols-outlined text-[16px] block">payments</span>
+              </div>
+              <div className="text-xs text-left">
+                <p className="font-bold text-gray-800">Latest Conversion Event</p>
+                <p className="text-gray-500 font-semibold mt-0.5">
+                  {(() => {
+                    const convLog = logs.find(l => l.type === 'Converted') || {
+                      message: 'Rahul Sharma converted! Order confirmed: ₹2,450 generated via WhatsApp.'
+                    };
+                    return convLog.message;
+                  })()}
+                </p>
+                <span className="text-[9px] text-gray-400 font-bold block mt-1">Status: Attribution Confirmed</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        {/* Right Card: AI Learning Loop Feedback System */}
+        <div className="bg-white/70 backdrop-blur-xl border border-indigo-100 p-8 rounded-[2.5rem] shadow-xl relative overflow-hidden flex flex-col justify-between card-top-glow-indigo">
+          <div className="absolute inset-0 bg-dot-pattern opacity-[0.3] pointer-events-none" />
+          
+          <div>
+            <div className="flex justify-between items-start mb-6">
+              <div>
+                <h3 className="text-sm font-bold text-gray-905 flex items-center gap-2">
+                  <span className="material-symbols-outlined text-indigo-655 animate-spin text-[18px]" style={{ animationDuration: '8s' }}>sync</span>
+                  AI Learning Loop
+                </h3>
+                <p className="text-[11px] text-gray-400 font-semibold">Continuous optimization of models based on live event feedback.</p>
+              </div>
+              <span className="text-[10px] font-bold bg-indigo-50 border border-indigo-100 text-indigo-700 px-2.5 py-0.5 rounded-full">
+                Active Optimization
+              </span>
+            </div>
+
+            <div className="space-y-4 border-t border-gray-100 pt-5">
+              
+              {/* Confidence Accuracy Metric */}
+              <div className="bg-indigo-50/20 border border-indigo-100/40 rounded-2xl p-4 flex items-center justify-between">
+                <div className="text-left space-y-1">
+                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">AI Confidence Accuracy</span>
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-2xl font-black text-indigo-950">94.6%</span>
+                    <span className="text-[9px] text-emerald-600 font-bold flex items-center gap-0.5">
+                      <span className="material-symbols-outlined text-[10px]">trending_up</span>
+                      +2.4% this week
+                    </span>
+                  </div>
+                  <p className="text-[10px] text-gray-400 font-semibold">Predicted Conversion: 15% vs Actual: 14.2%</p>
+                </div>
+                <div className="relative w-14 h-14 shrink-0">
+                  <svg className="w-full h-full -rotate-90" viewBox="0 0 36 36">
+                    <path className="text-gray-100" strokeWidth="3.5" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                    <path className="text-indigo-600" strokeDasharray="95, 100" strokeWidth="3.5" strokeLinecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                  </svg>
+                  <div className="absolute inset-0 flex items-center justify-center text-[10px] font-extrabold text-indigo-955">94%</div>
+                </div>
+              </div>
+
+              {/* Best Performers Row */}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-white border border-gray-150 p-4 rounded-xl text-left">
+                  <span className="block text-[9px] font-bold text-gray-400 uppercase tracking-wider">Best Performing Audience</span>
+                  <span className="text-xs font-bold text-gray-900 block mt-1">VIP Shoppers</span>
+                  <span className="text-[9px] text-emerald-600 font-semibold block mt-0.5">28.6% Conversion Rate</span>
+                </div>
+                <div className="bg-white border border-gray-155 p-4 rounded-xl text-left">
+                  <span className="block text-[9px] font-bold text-gray-400 uppercase tracking-wider">Best Performing Channel</span>
+                  <span className="text-xs font-bold text-gray-900 block mt-1">WhatsApp</span>
+                  <span className="text-[9px] text-emerald-600 font-semibold block mt-0.5">72% Avg Read Rate</span>
+                </div>
+              </div>
+
+              {/* Insights text block */}
+              <div className="space-y-3 pt-2">
+                <div className="text-left text-xs">
+                  <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md uppercase tracking-wider">What Worked</span>
+                  <p className="text-gray-500 font-semibold mt-1">
+                    Personalized WhatsApp clearances achieved 48% link CTR, outperforming static bulk promotions by 3.5x.
+                  </p>
+                </div>
+
+                <div className="text-left text-xs pt-1">
+                  <span className="text-[10px] font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded-md uppercase tracking-wider">What Failed</span>
+                  <p className="text-gray-500 font-semibold mt-1">
+                    SMS dispatches in Tier-2 regions encountered a 12% carrier bounce rate. AI recommends routing failed messages to WhatsApp.
+                  </p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <button
+            onClick={() => onNavigateToView('analytics')}
+            className="w-full mt-6 py-3 border border-indigo-150 hover:bg-indigo-50/50 text-indigo-650 font-bold text-xs rounded-xl transition-all"
+          >
+            Open Optimization Hub
+          </button>
+        </div>
+
       </div>
 
       {/* 4. INTERACTIVE SEGMENT TOPOLOGY */}

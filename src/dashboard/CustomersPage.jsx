@@ -1,6 +1,6 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 
-export default function CustomersPage({ customers, onSelectCustomer }) {
+export default function CustomersPage({ customers, activeCustomerId, clearActiveCustomerId }) {
   // Local state for filters
   const [search, setSearch] = useState('');
   const [cityFilter, setCityFilter] = useState('');
@@ -11,6 +11,17 @@ export default function CustomersPage({ customers, onSelectCustomer }) {
   
   // Selected customer for the timeline drawer
   const [selectedCust, setSelectedCust] = useState(null);
+
+  // Handle activeCustomerId deep link from simulator
+  useEffect(() => {
+    if (activeCustomerId) {
+      const found = customers.find(c => c.id === activeCustomerId);
+      if (found) {
+        setSelectedCust(found);
+      }
+      if (clearActiveCustomerId) clearActiveCustomerId();
+    }
+  }, [activeCustomerId, customers, clearActiveCustomerId]);
 
   // Available unique cities for dropdown
   const citiesList = useMemo(() => {
@@ -298,96 +309,162 @@ export default function CustomersPage({ customers, onSelectCustomer }) {
                 <span className="material-symbols-outlined text-[20px]">close</span>
               </button>
             </div>
-
             {/* Profile Overview */}
-            <div className="grid grid-cols-3 gap-4 bg-gray-50/50 border border-gray-100 rounded-2xl p-4 mb-6">
-              <div>
-                <span className="block text-[9px] font-bold text-gray-400 uppercase tracking-wider mb-0.5">Total Orders</span>
-                <span className="text-sm font-extrabold text-gray-900">{selectedCust.totalOrders}</span>
-              </div>
-              <div>
-                <span className="block text-[9px] font-bold text-gray-400 uppercase tracking-wider mb-0.5">Total Spend</span>
-                <span className="text-sm font-extrabold text-gray-900">₹{selectedCust.totalSpend.toLocaleString()}</span>
-              </div>
-              <div>
-                <span className="block text-[9px] font-bold text-gray-400 uppercase tracking-wider mb-0.5">Customer Status</span>
-                <span className="inline-block px-2 py-0.5 bg-indigo-50 border border-indigo-100 text-indigo-700 font-bold text-[9px] rounded-full mt-0.5">
-                  {selectedCust.status}
-                </span>
+            <div className="bg-gray-50/50 border border-gray-100 rounded-[1.5rem] p-5 mb-6 space-y-4 text-left">
+              <h4 className="text-xs font-bold text-gray-400 uppercase tracking-widest">CRM PROFILE OVERVIEW</h4>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <span className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-0.5">Lifetime Value (LTV)</span>
+                  <span className="text-base font-extrabold text-indigo-700">₹{selectedCust.clv ? selectedCust.clv.toLocaleString() : '8,450'}</span>
+                </div>
+                <div>
+                  <span className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-0.5">Total Revenue</span>
+                  <span className="text-base font-extrabold text-gray-900">₹{selectedCust.totalSpend.toLocaleString()}</span>
+                </div>
+                <div>
+                  <span className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-0.5">Total Purchases</span>
+                  <span className="text-sm font-bold text-gray-800">{selectedCust.totalOrders} Orders</span>
+                </div>
+                <div>
+                  <span className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-0.5">Preferred Channel</span>
+                  <span className="text-sm font-bold text-gray-850 flex items-center gap-1">
+                    <span className="material-symbols-outlined text-[16px] text-indigo-500">
+                      {selectedCust.preferredChannel === 'Email' ? 'mail' : selectedCust.preferredChannel === 'SMS' ? 'sms' : selectedCust.preferredChannel === 'RCS' ? 'forum' : 'chat'}
+                    </span>
+                    {selectedCust.preferredChannel}
+                  </span>
+                </div>
+                <div>
+                  <span className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-0.5">Segment Membership</span>
+                  <span className="inline-block px-2.5 py-0.5 bg-indigo-50 border border-indigo-100 text-indigo-700 font-extrabold text-[9px] rounded-full mt-0.5 uppercase">
+                    {selectedCust.status} Cohort
+                  </span>
+                </div>
+                <div>
+                  <span className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-0.5">Campaign Engagement</span>
+                  <span className="text-sm font-bold text-gray-850">{selectedCust.timeline ? selectedCust.timeline.length : 0} dispatches</span>
+                </div>
               </div>
             </div>
 
-            {/* Communication Timeline list */}
-            <div>
-              <h4 className="text-sm font-bold text-gray-900 mb-4 flex items-center gap-1.5">
+            {/* Journey Timeline */}
+            <div className="text-left flex-1">
+              <h4 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4 flex items-center gap-1.5">
                 <span className="material-symbols-outlined text-indigo-500 text-[18px]">history</span>
-                Communication History
+                Chronological Journey Timeline
               </h4>
 
-              {selectedCust.timeline && selectedCust.timeline.length > 0 ? (
-                <div className="space-y-6 relative before:absolute before:left-3 before:top-2 before:bottom-2 before:w-0.5 before:bg-gray-150">
-                  {selectedCust.timeline.map((campaignBlock, bIdx) => {
-                    let channelIcon = 'chat';
-                    let channelBg = 'bg-emerald-500 text-white';
-                    if (campaignBlock.channel === 'Email') { channelIcon = 'mail'; channelBg = 'bg-indigo-500 text-white'; }
-                    else if (campaignBlock.channel === 'SMS') { channelIcon = 'sms'; channelBg = 'bg-amber-500 text-white'; }
-                    else if (campaignBlock.channel === 'RCS') { channelIcon = 'forum'; channelBg = 'bg-pink-500 text-white'; }
+              <div className="space-y-6 relative before:absolute before:left-3 before:top-2 before:bottom-2 before:w-0.5 before:bg-gray-150">
+                {/* Latest Churn / Inactive Segment State */}
+                {selectedCust.status === 'INACTIVE' && (
+                  <div className="relative pl-8">
+                    <div className="absolute left-0.5 top-0.5 w-6 h-6 rounded-full flex items-center justify-center bg-amber-50 border border-amber-200 text-amber-700 shadow-xs">
+                      <span className="material-symbols-outlined text-[13px] font-bold">hourglass_empty</span>
+                    </div>
+                    <div className="bg-amber-50/15 border border-amber-100 rounded-2xl p-4 space-y-1 shadow-xs">
+                      <div className="flex justify-between items-center text-[10px] font-bold text-amber-800">
+                        <span>Entered Inactive Segment</span>
+                        <span>90 Days Inactive</span>
+                      </div>
+                      <p className="text-[11px] text-gray-500 font-semibold leading-relaxed">
+                        Customer exceeded the purchase interval gap of 95 days. Flagged for revenue recovery campaign.
+                      </p>
+                    </div>
+                  </div>
+                )}
 
-                    return (
-                      <div key={campaignBlock.id} className="relative pl-8">
-                        {/* Bullet Icon */}
-                        <div className={`absolute left-0.5 top-0.5 w-6 h-6 rounded-full flex items-center justify-center shadow-sm ${channelBg}`}>
-                          <span className="material-symbols-outlined text-[14px]">{channelIcon}</span>
+                {selectedCust.status === 'AT_RISK' && (
+                  <div className="relative pl-8">
+                    <div className="absolute left-0.5 top-0.5 w-6 h-6 rounded-full flex items-center justify-center bg-rose-50 border border-rose-200 text-rose-700 shadow-xs">
+                      <span className="material-symbols-outlined text-[13px] font-bold">warning</span>
+                    </div>
+                    <div className="bg-rose-50/15 border border-rose-100 rounded-2xl p-4 space-y-1 shadow-xs">
+                      <div className="flex justify-between items-center text-[10px] font-bold text-rose-805">
+                        <span>Entered Churn Risk Cohort</span>
+                        <span>60 Days Inactive</span>
+                      </div>
+                      <p className="text-[11px] text-gray-500 font-semibold leading-relaxed">
+                        Purchase intervals dropped by 45%. Similarity to historical churn trends triggered at-risk flag.
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                {/* Campaign Touchpoints */}
+                {selectedCust.timeline && selectedCust.timeline.map((campaignBlock) => {
+                  let channelIcon = 'chat';
+                  let channelBg = 'bg-emerald-500 text-white';
+                  if (campaignBlock.channel === 'Email') { channelIcon = 'mail'; channelBg = 'bg-indigo-500 text-white'; }
+                  else if (campaignBlock.channel === 'SMS') { channelIcon = 'sms'; channelBg = 'bg-amber-500 text-white'; }
+                  else if (campaignBlock.channel === 'RCS') { channelIcon = 'forum'; channelBg = 'bg-pink-500 text-white'; }
+
+                  return (
+                    <div key={campaignBlock.id} className="relative pl-8">
+                      <div className={`absolute left-0.5 top-0.5 w-6 h-6 rounded-full flex items-center justify-center shadow-sm ${channelBg}`}>
+                        <span className="material-symbols-outlined text-[14px]">{channelIcon}</span>
+                      </div>
+
+                      <div className="bg-white border border-gray-150 rounded-2xl p-4 space-y-3 shadow-xs hover:border-indigo-150 transition-colors text-left">
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <p className="text-xs font-bold text-gray-900">{campaignBlock.campaignName}</p>
+                            <span className="text-[10px] text-gray-400 font-semibold">{campaignBlock.channel} Outbound</span>
+                          </div>
+                          <span className="text-[9px] text-gray-400 font-bold">
+                            {new Date(campaignBlock.events[0].timestamp).toLocaleDateString()}
+                          </span>
                         </div>
 
-                        {/* Event Content */}
-                        <div className="bg-white border border-gray-150 rounded-2xl p-4 space-y-3 shadow-xs hover:border-gray-250 transition-colors">
-                          <div className="flex justify-between items-start">
-                            <div>
-                              <p className="text-xs font-bold text-gray-900">{campaignBlock.campaignName}</p>
-                              <span className="text-[10px] text-gray-400 font-semibold">{campaignBlock.channel} Channel</span>
-                            </div>
-                            <span className="text-[9px] text-gray-450 font-bold">
-                              {new Date(campaignBlock.events[0].timestamp).toLocaleDateString()}
-                            </span>
-                          </div>
+                        <div className="space-y-2 border-t border-gray-100 pt-2.5">
+                          {campaignBlock.events.map((evt, eIdx) => {
+                            let statusColor = 'text-indigo-650';
+                            let iconName = 'circle';
+                            if (evt.type.includes('Sent')) { statusColor = 'text-gray-500'; iconName = 'arrow_forward'; }
+                            else if (evt.type.includes('Delivered')) { statusColor = 'text-blue-500'; iconName = 'mark_email_read'; }
+                            else if (evt.type.includes('Opened') || evt.type.includes('Read')) { statusColor = 'text-amber-500'; iconName = 'visibility'; }
+                            else if (evt.type.includes('Clicked')) { statusColor = 'text-pink-500'; iconName = 'ads_click'; }
+                            else if (evt.type.includes('Converted')) { statusColor = 'text-emerald-600'; iconName = 'local_mall'; }
 
-                          {/* Event Timeline Steps */}
-                          <div className="space-y-2 border-t border-gray-50 pt-2.5">
-                            {campaignBlock.events.map((evt, eIdx) => {
-                              let statusColor = 'text-indigo-650';
-                              if (evt.type.includes('Sent')) statusColor = 'text-gray-500';
-                              if (evt.type.includes('Delivered')) statusColor = 'text-blue-500';
-                              if (evt.type.includes('Opened') || evt.type.includes('Read')) statusColor = 'text-amber-500';
-                              if (evt.type.includes('Clicked')) statusColor = 'text-pink-500';
-                              if (evt.type.includes('Converted')) statusColor = 'text-emerald-600';
-
-                              return (
-                                <div key={eIdx} className="flex justify-between items-center text-[10px]">
-                                  <span className="flex items-center gap-1.5 font-bold">
-                                    <span className="w-1.5 h-1.5 rounded-full bg-gray-300" />
-                                    <span className={statusColor}>{evt.type}</span>
-                                    {evt.value && (
-                                      <span className="bg-emerald-50 text-emerald-700 px-1 py-0.2 rounded font-extrabold border border-emerald-100">
-                                        {evt.value}
-                                      </span>
-                                    )}
-                                  </span>
-                                  <span className="text-gray-400 font-medium">
-                                    {new Date(evt.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                  </span>
-                                </div>
-                              );
-                            })}
-                          </div>
+                            return (
+                              <div key={eIdx} className="flex justify-between items-center text-[10px]">
+                                <span className="flex items-center gap-1.5 font-bold">
+                                  <span className="material-symbols-outlined text-[12px] text-gray-400">{iconName}</span>
+                                  <span className={statusColor}>{evt.type}</span>
+                                  {evt.value && (
+                                    <span className="bg-emerald-50 text-emerald-700 px-1 py-0.2 rounded font-extrabold border border-emerald-100/50">
+                                      {evt.value}
+                                    </span>
+                                  )}
+                                </span>
+                                <span className="text-gray-400 font-medium">
+                                  {new Date(evt.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                </span>
+                              </div>
+                            );
+                          })}
                         </div>
                       </div>
-                    );
-                  })}
+                    </div>
+                  );
+                })}
+
+                {/* Profile Inception Milestone */}
+                <div className="relative pl-8">
+                  <div className="absolute left-0.5 top-0.5 w-6 h-6 rounded-full flex items-center justify-center bg-indigo-50 border border-indigo-200 text-indigo-650 shadow-xs">
+                    <span className="material-symbols-outlined text-[13px] font-bold">person_add</span>
+                  </div>
+                  <div className="bg-white border border-gray-150 rounded-2xl p-4 space-y-1 shadow-xs">
+                    <div className="flex justify-between items-center text-[10px] font-bold text-gray-500">
+                      <span>Customer Profile Ingested</span>
+                      <span>Initial Registration</span>
+                    </div>
+                    <p className="text-[11px] text-gray-500 font-semibold leading-relaxed">
+                      Customer data successfully mapped and behavioral parameters indexed.
+                    </p>
+                  </div>
                 </div>
-              ) : (
-                <p className="text-xs text-gray-400 text-center py-6">No historical communications found.</p>
-              )}
+              </div>
             </div>
           </div>
         </div>

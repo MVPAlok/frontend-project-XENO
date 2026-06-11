@@ -1,20 +1,29 @@
 import React from 'react';
 
-export default function Sidebar({ currentView, onViewChange, onLogout, user }) {
+export default function Sidebar({ 
+  currentView, 
+  onViewChange, 
+  onLogout, 
+  user, 
+  workspace, 
+  onResetWorkspace,
+  unreadNotificationCount = 0
+}) {
   const menuItems = [
     { id: 'dashboard', label: 'Dashboard', icon: 'dashboard' },
+    { id: 'insights', label: 'AI Insights', icon: 'psychology', badge: unreadNotificationCount },
     { id: 'customers', label: 'Customers', icon: 'group' },
     { id: 'segments', label: 'Segments', icon: 'target' },
     { id: 'copilot', label: 'AI Copilot', icon: 'smart_toy' },
     { id: 'campaigns', label: 'Campaigns', icon: 'campaign' },
     { id: 'analytics', label: 'Analytics', icon: 'monitoring' },
-    { id: 'simulator', label: 'Channel Simulator', icon: 'dns' },
+    { id: 'simulator', label: 'Activity Center', icon: 'dns' },
     { id: 'settings', label: 'Settings', icon: 'settings' },
   ];
 
   return (
     <aside className="w-64 border-r border-gray-150/40 bg-gradient-to-b from-white/95 via-white/85 to-indigo-50/10 backdrop-blur-xl flex flex-col h-screen sticky top-0 shrink-0 z-20">
-      {/* Brand Header - Taller, matching TopHeader */}
+      {/* Brand Header */}
       <div className="h-[5.5rem] border-b border-gray-150/40 flex items-center px-6 gap-3 relative">
         <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-indigo-200/20 via-purple-200/30 to-indigo-100/20" />
         <div className="p-2 bg-indigo-50 border border-indigo-100 rounded-xl">
@@ -22,9 +31,13 @@ export default function Sidebar({ currentView, onViewChange, onLogout, user }) {
             insights
           </span>
         </div>
-        <div>
-          <h1 className="text-sm font-black text-gray-900 leading-tight">Xeno AI</h1>
-          <p className="text-[10px] text-gray-400 font-extrabold uppercase tracking-wider">Campaign Console</p>
+        <div className="text-left">
+          <h1 className="text-sm font-black text-gray-905 leading-tight truncate max-w-[150px]">
+            {workspace ? workspace.brandName : 'Xeno AI'}
+          </h1>
+          <p className="text-[10px] text-gray-400 font-extrabold uppercase tracking-wider truncate max-w-[150px]">
+            {workspace ? workspace.industry : 'Campaign Console'}
+          </p>
         </div>
       </div>
 
@@ -55,7 +68,13 @@ export default function Sidebar({ currentView, onViewChange, onLogout, user }) {
               </span>
               <span className={`relative z-10 ${isActive ? 'text-indigo-950 font-extrabold' : ''}`}>{item.label}</span>
               
-              {isActive && (
+              {item.badge > 0 && (
+                <span className="ml-auto bg-rose-500 text-white text-[9px] px-2 py-0.5 rounded-full font-black animate-pulse relative z-10">
+                  {item.badge}
+                </span>
+              )}
+
+              {isActive && !item.badge && (
                 <div className="absolute right-3.5 w-1.5 h-1.5 rounded-full bg-indigo-600 animate-pulse" />
               )}
             </button>
@@ -71,32 +90,32 @@ export default function Sidebar({ currentView, onViewChange, onLogout, user }) {
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
           </span>
-          <span className="text-[9px] font-black text-emerald-800 tracking-widest uppercase">
+          <span className="text-[9px] font-black text-emerald-800 tracking-widest uppercase text-left">
             AI Engine Online
           </span>
         </div>
-        <div className="space-y-1.5">
+        <div className="space-y-1.5 text-left">
           <div className="flex justify-between text-[10px] font-semibold text-gray-500">
             <span>Accuracy</span>
             <span className="font-extrabold text-emerald-700">94% Prediction</span>
           </div>
           <div className="flex justify-between text-[10px] font-semibold text-gray-500">
             <span>Opportunities</span>
-            <span className="font-extrabold text-indigo-700">324 Detected</span>
+            <span className="font-extrabold text-indigo-700">4 Active Hub</span>
           </div>
         </div>
       </div>
 
       {/* User Session Profile Card Footer */}
       <div className="p-4 border-t border-gray-200/50 bg-gray-50/40">
-        <div className="flex items-center gap-3 mb-4">
+        <div className="flex items-center gap-3 mb-4 text-left">
           <img
             alt={user?.firstName || 'User'}
             className="w-10 h-10 rounded-full border border-gray-200 object-cover"
             src={user?.avatarUrl || `https://api.dicebear.com/7.x/initials/svg?seed=${user?.firstName || 'Admin'}`}
           />
           <div className="flex-1 min-w-0">
-            <p className="text-xs font-bold text-gray-900 truncate">
+            <p className="text-xs font-bold text-gray-905 truncate">
               {user?.firstName ? `${user.firstName} ${user.lastName}` : 'Sarah Jenkins'}
             </p>
             <p className="text-[10px] text-gray-400 font-bold truncate">
@@ -104,13 +123,25 @@ export default function Sidebar({ currentView, onViewChange, onLogout, user }) {
             </p>
           </div>
         </div>
-        <button
-          onClick={onLogout}
-          className="w-full flex items-center justify-center gap-2 py-2 px-3 border border-red-200 hover:bg-red-50/80 text-red-600 rounded-xl font-bold text-[11px] transition-all hover:scale-[1.01]"
-        >
-          <span className="material-symbols-outlined text-[15px]">logout</span>
-          Sign Out
-        </button>
+
+        <div className="flex flex-col gap-1.5">
+          {workspace && (
+            <button
+              onClick={onResetWorkspace}
+              className="w-full flex items-center justify-center gap-2 py-1.5 px-3 border border-gray-200 hover:bg-gray-100 text-gray-550 rounded-xl font-bold text-[10px] transition-all"
+            >
+              <span className="material-symbols-outlined text-[15px]">restart_alt</span>
+              Reset Workspace
+            </button>
+          )}
+          <button
+            onClick={onLogout}
+            className="w-full flex items-center justify-center gap-2 py-2 px-3 border border-red-200 hover:bg-red-50/80 text-red-600 rounded-xl font-bold text-[11px] transition-all hover:scale-[1.01]"
+          >
+            <span className="material-symbols-outlined text-[15px]">logout</span>
+            Sign Out
+          </button>
+        </div>
       </div>
     </aside>
   );
