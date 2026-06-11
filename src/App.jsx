@@ -1,56 +1,84 @@
 import React, { useState, useEffect } from 'react';
+import { Routes, Route, useNavigate, useLocation, Navigate } from 'react-router-dom';
 import LandingPage from './LandingPage';
 import AuthPage from './components/Auth/AuthPage';
-
+import DashboardMain from './dashboard/DashboardMain';
 import { authAPI, getSessionTokens, clearSessionTokens } from './utils/api';
 
-export default function App() {
-  const [currentView, setCurrentView] = useState('landing'); // 'landing' | 'auth' | 'dashboard'
-  const [authSubView, setAuthSubView] = useState('login');
-  const [user, setUser] = useState(null);
+// Proper Protected Route Wrapper
+const ProtectedRoute = ({ user, children }) => {
+  if (!user) {
+    return <Navigate to="/auth" replace />;
+  }
+  return children;
+};
 
-  // Restore authenticated session on startup
+export default function App() {
+  const [user, setUser] = useState(null);
+  const [isInitializing, setIsInitializing] = useState(true);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // Clean initialization
   useEffect(() => {
-    const checkSession = async () => {
+    let mounted = true;
+
+    const initAuth = async () => {
       const { accessToken } = getSessionTokens();
+      
+      // If we already have a user in state (e.g. from bypass), don't wipe it
+      if (user) {
+        setIsInitializing(false);
+        return;
+      }
+
       if (accessToken) {
         try {
-          const data = await authAPI.getMe();
-          if (data.success && data.user) {
-            setUser(data.user);
-            setCurrentView('dashboard');
+          // If it's a demo token, just mock the user and skip API
+          if (accessToken === 'demo_access_token') {
+            setUser({
+              id: "demo-user-123",
+              email: "demo@xeno.ai",
+              firstName: "Sarah",
+              lastName: "Jenkins",
+              role: "ADMIN",
+            });
+          } else {
+            const data = await authAPI.getMe();
+            if (data.success && data.user && mounted) {
+              setUser(data.user);
+            }
           }
         } catch (err) {
-          console.warn("Session expired or API server offline. Continuing in default state.", err);
+          console.warn("Session expired or API error.");
           clearSessionTokens();
         }
       }
+      
+      if (mounted) {
+        setIsInitializing(false);
+      }
     };
 
-    // Route to verification / reset if path is present in URL
-    const path = window.location.pathname;
-    if (path === '/verify-email' || path === '/reset-password') {
-      setCurrentView('auth');
-    } else {
-      checkSession();
-    }
+    initAuth();
+
+    return () => { mounted = false; };
   }, []);
 
   // Listen for session expiration events from API interceptor
   useEffect(() => {
     const handleAuthExpired = () => {
       setUser(null);
-      setCurrentView('auth');
-      setAuthSubView('login');
       clearSessionTokens();
+      navigate('/auth', { state: { initialView: 'login' } });
     };
     window.addEventListener('xeno_auth_expired', handleAuthExpired);
     return () => window.removeEventListener('xeno_auth_expired', handleAuthExpired);
-  }, []);
+  }, [navigate]);
 
   const handleAuthSuccess = (authenticatedUser) => {
     setUser(authenticatedUser);
-    setCurrentView('dashboard');
+    navigate('/dashboard');
   };
 
   const handleLogout = async () => {
@@ -61,47 +89,69 @@ export default function App() {
     } finally {
       setUser(null);
       clearSessionTokens();
-      setCurrentView('landing');
-      // Clean path in address bar
-      window.history.replaceState({}, document.title, '/');
+      navigate('/');
     }
   };
 
+  if (isInitializing) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#FDFDFD]">
+        <div className="w-8 h-8 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
   return (
-    <div className="w-full min-h-screen">
-      {currentView === 'landing' && (
-        <LandingPage 
-          onLaunch={() => {
-            // Check if we are already logged in
-            const { accessToken } = getSessionTokens();
-            if (accessToken && user) {
-              setCurrentView('dashboard');
-            } else {
-              setAuthSubView('login');
-              setCurrentView('auth');
-            }
-          }} 
+    <div className="w-full h-full">
+      <Routes>
+        <Route 
+          path="/" 
+          element={
+            <LandingPage 
+              onLaunch={() => {
+                if (user) {
+                  navigate('/dashboard');
+                } else {
+                  navigate('/auth');
+                }
+              }} 
+            />
+          } 
         />
-      )}
-
-      {currentView === 'auth' && (
-        <AuthPage 
-          initialView={authSubView}
-          onAuthSuccess={handleAuthSuccess}
-          onBackToLanding={() => {
-            setCurrentView('landing');
-            window.history.replaceState({}, document.title, '/');
-          }}
+        
+        <Route 
+          path="/auth" 
+          element={
+            user ? <Navigate to="/dashboard" replace /> : (
+              <AuthPage 
+                initialView="login"
+                onAuthSuccess={handleAuthSuccess}
+                onBackToLanding={() => navigate('/')}
+              />
+            )
+          } 
         />
-      )}
 
-      {currentView === 'dashboard' && (
-        <div className="flex flex-col items-center justify-center h-screen bg-gray-50 text-gray-800">
-          <h1 className="text-3xl font-bold mb-4">Dashboard</h1>
-          <p className="mb-8">Welcome, {user?.name || 'User'}!</p>
-          <button onClick={handleLogout} className="px-6 py-2 bg-[#6b4cff] text-white rounded-md font-medium hover:bg-[#5a3dea] transition-colors">Logout</button>
-        </div>
-      )}
+        {/* Redirect old routes */}
+        <Route path="/verify-email" element={<Navigate to="/auth" replace state={{ initialView: 'verify-email' }} />} />
+        <Route path="/reset-password" element={<Navigate to="/auth" replace state={{ initialView: 'reset-password' }} />} />
+
+        {/* Protected Dashboard Route */}
+        <Route 
+          path="/dashboard/*" 
+          element={
+            <ProtectedRoute user={user}>
+              <DashboardMain 
+                user={user}
+                onBack={handleLogout} 
+              />
+            </ProtectedRoute>
+          } 
+        />
+
+        {/* Catch-all fallback route */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
     </div>
   );
 }

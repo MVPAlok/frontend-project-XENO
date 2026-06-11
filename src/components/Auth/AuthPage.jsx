@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { authAPI, setSessionTokens } from '../../utils/api';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export default function AuthPage({ initialView = 'login', onAuthSuccess, onBackToLanding }) {
-  const [view, setView] = useState(initialView);
+  const location = useLocation();
+  const navigate = useNavigate();
+  // Use state from location if available, otherwise fallback to prop
+  const [view, setView] = useState(location.state?.initialView || initialView);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [firstName, setFirstName] = useState('');
@@ -12,26 +16,30 @@ export default function AuthPage({ initialView = 'login', onAuthSuccess, onBackT
   const [alert, setAlert] = useState(null); // { type: 'success' | 'error', message: '' }
   const [token, setToken] = useState(''); // Used for URL verification / reset password
 
-  // Capture token from URL if present
+  // Capture token from URL if present and update view if location state changes
   useEffect(() => {
+    if (location.state?.initialView) {
+      setView(location.state.initialView);
+    }
+
     const params = new URLSearchParams(window.location.search);
     const urlToken = params.get('token');
 
-    // Detect path-based routing triggers
+    // Detect path-based routing triggers (legacy fallback, normally handled by App.jsx redirects now)
     const path = window.location.pathname;
-    if (path === '/verify-email') {
+    if (path === '/verify-email' || location.state?.initialView === 'verify-email') {
       setView('verify-email');
       if (urlToken) {
         setToken(urlToken);
         handleAutoVerifyEmail(urlToken);
       }
-    } else if (path === '/reset-password') {
+    } else if (path === '/reset-password' || location.state?.initialView === 'reset-password') {
       setView('reset-password');
       if (urlToken) {
         setToken(urlToken);
       }
     }
-  }, []);
+  }, [location.state, location.pathname]);
 
   const triggerAlert = (type, message) => {
     setAlert({ type, message });
@@ -158,6 +166,9 @@ export default function AuthPage({ initialView = 'login', onAuthSuccess, onBackT
       status: "ACTIVE",
       isEmailVerified: true,
     };
+    // Set dummy tokens so session persists on reload
+    setSessionTokens('demo_access_token', 'demo_refresh_token');
+    
     triggerAlert('success', 'Welcome to Xeno AI Campaign Console (Demo Mode)!');
     setTimeout(() => {
       onAuthSuccess(mockUser);
@@ -165,7 +176,7 @@ export default function AuthPage({ initialView = 'login', onAuthSuccess, onBackT
   };
 
   return (
-    <div className="min-h-screen bg-[#faf8ff] bg-grid-pattern relative flex flex-col justify-center items-center py-12 px-4 sm:px-6 lg:px-8 overflow-hidden select-none">
+    <div className="min-h-screen bg-[#faf8ff] bg-grid-pattern relative flex flex-col justify-center items-center py-12 px-4 sm:px-6 lg:px-8 overflow-y-auto select-none">
       
       {/* Dynamic Alert Banner */}
       {alert && (
@@ -490,7 +501,7 @@ export default function AuthPage({ initialView = 'login', onAuthSuccess, onBackT
           )}
 
           {/* Footer View Toggle Links */}
-          <div className="mt-6 pt-5 border-t border-gray-150 flex flex-col items-center gap-3">
+          <div className="mt-6 pt-5 border-t border-gray-100 flex flex-col items-center gap-3">
             {view === 'login' && (
               <p className="text-xs text-gray-500 font-semibold">
                 Don't have an account?{' '}
@@ -512,18 +523,20 @@ export default function AuthPage({ initialView = 'login', onAuthSuccess, onBackT
                 Back to Sign In
               </button>
             )}
-          </div>
-        </div>
 
-        {/* Developer Offline Bypass Fallback */}
-        <div className="mt-8 text-center bg-white/40 backdrop-blur-md border border-white/50 rounded-2xl p-4 shadow-sm">
-          <p className="text-xs text-gray-500 font-semibold mb-2">Testing local UI without database setup?</p>
-          <button 
-            onClick={handleBypassDemo}
-            className="text-xs text-indigo-650 font-bold px-4 py-2 border border-indigo-200 hover:border-indigo-400 bg-white/60 hover:bg-white rounded-xl shadow-xs transition-all hover:scale-[1.02]"
-          >
-            Bypass to Dashboard (Demo Mode)
-          </button>
+            {/* Developer Offline Bypass Fallback - always visible inside the card */}
+            <div className="w-full mt-2 pt-4 border-t border-dashed border-gray-200">
+              <p className="text-[10px] text-gray-400 font-semibold text-center mb-2">No backend? Try demo mode</p>
+              <button 
+                id="bypass-demo-btn"
+                onClick={handleBypassDemo}
+                className="w-full text-xs text-indigo-600 font-bold px-4 py-2.5 border border-indigo-200 hover:border-indigo-400 bg-indigo-50/50 hover:bg-indigo-50 rounded-xl shadow-sm transition-all hover:scale-[1.01] flex items-center justify-center gap-2"
+              >
+                <span className="material-symbols-outlined text-[14px]">play_circle</span>
+                Bypass to Dashboard (Demo Mode)
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -75,6 +75,7 @@ export default {
         "sm": "8px"
       },
       "fontFamily": {
+        "sans": ["Inter", "sans-serif"],
         "headline-sm": ["Inter", "sans-serif"],
         "headline-lg-mobile": ["Inter", "sans-serif"],
         "headline-md": ["Inter", "sans-serif"],
