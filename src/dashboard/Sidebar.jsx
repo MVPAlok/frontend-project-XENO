@@ -7,7 +7,9 @@ export default function Sidebar({
   user, 
   workspace, 
   onResetWorkspace,
-  unreadNotificationCount = 0
+  unreadNotificationCount = 0,
+  isMobileOpen,
+  onCloseMobile
 }) {
   const menuItems = [
     { id: 'dashboard', label: 'Dashboard', icon: 'dashboard' },
@@ -22,7 +24,16 @@ export default function Sidebar({
   ];
 
   return (
-    <aside className="w-64 border-r border-gray-150/40 bg-gradient-to-b from-white/95 via-white/85 to-indigo-50/10 backdrop-blur-xl flex flex-col h-screen sticky top-0 shrink-0 z-20">
+    <>
+      {/* Mobile backdrop */}
+      {isMobileOpen && (
+        <div 
+          className="fixed inset-0 bg-gray-950/40 backdrop-blur-sm z-40 lg:hidden animate-in fade-in"
+          onClick={onCloseMobile}
+        />
+      )}
+
+      <aside className={`fixed inset-y-0 left-0 w-64 border-r border-gray-150/40 bg-gradient-to-b from-white/95 via-white/85 to-indigo-50/10 backdrop-blur-xl flex flex-col h-screen shrink-0 z-50 transform transition-transform duration-300 lg:relative lg:translate-x-0 ${isMobileOpen ? 'translate-x-0' : '-translate-x-full'}`}>
       {/* Brand Header */}
       <div className="h-[5.5rem] border-b border-gray-150/40 flex items-center px-6 gap-3 relative">
         <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-indigo-200/20 via-purple-200/30 to-indigo-100/20" />
@@ -144,5 +155,6 @@ export default function Sidebar({
         </div>
       </div>
     </aside>
+    </>
   );
 }

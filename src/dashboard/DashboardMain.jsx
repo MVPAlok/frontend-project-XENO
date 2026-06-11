@@ -26,6 +26,8 @@ export default function DashboardMain({ user, onBack }) {
   const location = useLocation();
   const currentView = location.pathname.split('/')[2] || 'dashboard';
 
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+
   const [copilotPrompt, setCopilotPrompt] = useState('');
 
   // Floating Copilot Handlers
@@ -613,12 +615,17 @@ export default function DashboardMain({ user, onBack }) {
       {/* 1. Sidebar Left */}
       <Sidebar 
         currentView={currentView}
-        onViewChange={handleNavigateView}
+        onViewChange={(view) => {
+          handleNavigateView(view);
+          setIsMobileSidebarOpen(false);
+        }}
         onLogout={onBack}
         user={user}
         workspace={activeWorkspace}
         onResetWorkspace={handleResetWorkspace}
         unreadNotificationCount={notifications.filter(n => !n.read).length}
+        isMobileOpen={isMobileSidebarOpen}
+        onCloseMobile={() => setIsMobileSidebarOpen(false)}
       />
 
       {/* Right Column Container */}
@@ -644,10 +651,11 @@ export default function DashboardMain({ user, onBack }) {
           notifications={notifications}
           onDismissNotification={handleDismissNotification}
           onClearAllNotifications={handleClearAllNotifications}
+          onToggleMobileSidebar={() => setIsMobileSidebarOpen(prev => !prev)}
         />
 
         {/* 3. Main Workspace Area */}
-        <main className="flex-1 min-h-0 p-8 overflow-y-auto custom-scrollbar relative z-10">
+        <main className="flex-1 min-h-0 p-4 md:p-8 overflow-y-auto custom-scrollbar relative z-10">
           <Routes>
             <Route 
               path="/" 

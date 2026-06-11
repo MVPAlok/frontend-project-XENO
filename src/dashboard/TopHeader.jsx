@@ -18,7 +18,8 @@ export default function TopHeader({
   onChangeRole,
   notifications = [],
   onDismissNotification,
-  onClearAllNotifications
+  onClearAllNotifications,
+  onToggleMobileSidebar
 }) {
   const [showWorkspaceDropdown, setShowWorkspaceDropdown] = useState(false);
   const [showRoleDropdown, setShowRoleDropdown] = useState(false);
@@ -50,6 +51,13 @@ export default function TopHeader({
 
       {/* Brand & Store Selector */}
       <div className="flex items-center gap-4">
+        {/* Mobile Hamburger Menu */}
+        <button 
+          onClick={onToggleMobileSidebar}
+          className="lg:hidden p-2 -ml-2 text-gray-500 hover:text-gray-900 rounded-lg hover:bg-gray-100 transition-colors"
+        >
+          <span className="material-symbols-outlined text-[24px]">menu</span>
+        </button>
         <div className="relative">
           <button
             onClick={() => {
@@ -228,7 +236,7 @@ export default function TopHeader({
       </div>
 
       {/* Main Search Bar */}
-      <div className="flex-1 max-w-lg mx-8 group">
+      <div className="flex-1 max-w-lg mx-2 md:mx-8 hidden sm:block group">
         <div className="relative flex items-center transition-all duration-300">
           <div className="absolute -inset-0.5 bg-gradient-to-r from-indigo-400 to-purple-400 rounded-xl blur opacity-0 group-focus-within:opacity-40 transition-opacity duration-300 pointer-events-none" />
           
@@ -243,9 +251,9 @@ export default function TopHeader({
       </div>
 
       {/* Utility Panel */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2 md:gap-4">
         {/* Role Selector Dropdown */}
-        <div className="relative">
+        <div className="relative hidden md:block">
           <button
             onClick={() => {
               setShowRoleDropdown(!showRoleDropdown);
@@ -286,7 +294,7 @@ export default function TopHeader({
         {/* AI Assistant shortcut */}
         <button
           onClick={onOpenGrowthStudio}
-          className="premium-gradient-btn flex items-center gap-1.5 px-5 py-2.5 rounded-xl font-bold text-xs text-white shadow-[0_4px_14px_0_rgba(124,58,237,0.25)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_8px_20px_0_rgba(124,58,237,0.4)] active:scale-95"
+          className="premium-gradient-btn hidden sm:flex items-center gap-1.5 px-5 py-2.5 rounded-xl font-bold text-xs text-white shadow-[0_4px_14px_0_rgba(124,58,237,0.25)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_8px_20px_0_rgba(124,58,237,0.4)] active:scale-95"
         >
           <span className="material-symbols-outlined text-[16px] text-cyan-300 sparkle-pulse-icon">auto_awesome</span>
           <span>Ask Growth Studio</span>
@@ -370,7 +378,7 @@ export default function TopHeader({
         </div>
 
         {/* User Info */}
-        <div className="flex items-center gap-2.5 pl-3 border-l border-gray-200/50">
+        <div className="flex items-center gap-2.5 pl-2 md:pl-3 border-l border-gray-200/50">
           <img
             alt={user?.firstName || 'User'}
             className="w-8 h-8 rounded-full border border-gray-150 object-cover"
