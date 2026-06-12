@@ -378,7 +378,7 @@ export default function OnboardingWizard({ onComplete, initialStep = 1, onCancel
               <button
                 onClick={() => setStep(3)}
                 disabled={!customerFile || !orderFile}
-                className="px-8 py-3.5 bg-indigo-650 hover:bg-indigo-750 text-white rounded-xl font-bold text-xs shadow-md transition-all hover:scale-[1.01] flex items-center gap-2 disabled:opacity-50"
+                className="px-8 py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold text-xs shadow-md transition-all hover:scale-[1.01] flex items-center gap-2 disabled:opacity-50"
               >
                 Analyze Datasets
                 <span className="material-symbols-outlined text-[16px]">insights</span>

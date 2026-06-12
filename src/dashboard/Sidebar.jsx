@@ -80,13 +80,13 @@ export default function Sidebar({
               <span className={`relative z-10 ${isActive ? 'text-indigo-950 font-extrabold' : ''}`}>{item.label}</span>
               
               {item.badge > 0 && (
-                <span className="ml-auto bg-rose-500 text-white text-[9px] px-2 py-0.5 rounded-full font-black animate-pulse relative z-10">
+                <span className="ml-auto bg-rose-500 text-white text-[9px] px-2 py-0.5 rounded-full font-black shadow-[0_0_8px_rgba(244,63,94,0.6)] relative z-10 pointer-events-none">
                   {item.badge}
                 </span>
               )}
 
               {isActive && !item.badge && (
-                <div className="absolute right-3.5 w-1.5 h-1.5 rounded-full bg-indigo-600 animate-pulse" />
+                <div className="absolute right-3.5 w-1.5 h-1.5 rounded-full bg-indigo-600 shadow-[0_0_6px_rgba(79,70,229,0.8)] pointer-events-none" />
               )}
             </button>
           );
@@ -97,9 +97,9 @@ export default function Sidebar({
       <div className="px-5 py-4 mx-4 my-2 border border-emerald-100/50 bg-emerald-50/15 rounded-2xl flex flex-col gap-2.5 relative overflow-hidden backdrop-blur-md">
         <div className="absolute top-0 right-0 w-12 h-12 bg-emerald-500/5 rounded-full blur-xl pointer-events-none" />
         <div className="flex items-center gap-2">
-          <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+          <span className="relative flex h-2 w-2 pointer-events-none">
+            <span className="animate-pulse absolute inset-0 rounded-full bg-emerald-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]"></span>
           </span>
           <span className="text-[9px] font-black text-emerald-800 tracking-widest uppercase text-left">
             AI Engine Online

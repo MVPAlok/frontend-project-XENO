@@ -312,12 +312,12 @@ export default function TopHeader({
           >
             <span className="material-symbols-outlined text-[20px]">notifications</span>
             {unreadCount > 0 && (
-              <>
-                <div className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-rose-500 rounded-full animate-ping" />
-                <div className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-rose-500 rounded-full flex items-center justify-center text-[7px] text-white font-black">
+              <div className="absolute top-1.5 right-1.5 pointer-events-none">
+                <div className="absolute inset-0 bg-rose-500 rounded-full animate-pulse opacity-50" />
+                <div className="relative w-3.5 h-3.5 bg-rose-500 rounded-full flex items-center justify-center text-[8px] text-white font-black shadow-sm">
                   {unreadCount}
                 </div>
-              </>
+              </div>
             )}
           </button>
 

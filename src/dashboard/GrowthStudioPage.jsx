@@ -263,7 +263,7 @@ export default function GrowthStudioPage({ initialPrompt, onLaunchCampaign, role
             <button
               type="submit"
               disabled={thinking || !prompt.trim() || role === 'Viewer'}
-              className="px-6 py-3.5 bg-indigo-655 hover:bg-indigo-750 text-white rounded-xl font-bold text-xs shadow-md transition-all hover:scale-[1.01] disabled:opacity-50 flex items-center gap-2"
+              className="px-6 py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold text-xs shadow-md transition-all hover:scale-[1.01] disabled:opacity-50 flex items-center gap-2"
             >
               {thinking ? (
                 <>
@@ -445,37 +445,37 @@ export default function GrowthStudioPage({ initialPrompt, onLaunchCampaign, role
             </div>
 
             {/* Launch CTA toolbar */}
-            <div className="flex justify-between items-center border-t border-gray-100 pt-5 mt-6">
+            <div className="flex flex-col gap-5 border-t border-gray-200 pt-6 mt-6">
               <button
                 onClick={() => triggerAISimulation(prompt)}
-                className="text-[10px] font-bold text-gray-500 hover:text-gray-900 transition-colors flex items-center gap-1"
+                className="w-fit text-[11px] font-bold text-gray-600 hover:text-indigo-600 transition-all flex items-center gap-2 hover:underline"
               >
-                <span className="material-symbols-outlined text-[14px]">refresh</span>
+                <span className="material-symbols-outlined text-[16px]">refresh</span>
                 Re-predict
               </button>
 
-              <div className="flex gap-2">
+              <div className="flex flex-wrap gap-3 justify-start pt-2">
                 <button
                   onClick={handleSaveDraft}
                   disabled={role === 'Viewer'}
-                  className="px-3.5 py-2 border border-gray-200 hover:bg-gray-50 text-gray-750 rounded-xl font-bold text-xs transition-all disabled:opacity-50"
+                  className="px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-800 border border-gray-300 rounded-xl font-bold text-xs transition-all disabled:opacity-40 hover:shadow-md active:scale-95"
                 >
                   Save Draft
                 </button>
                 <button
                   onClick={handleSchedule}
                   disabled={role === 'Viewer'}
-                  className="px-3.5 py-2 border border-indigo-200 bg-indigo-50/50 hover:bg-indigo-50 text-indigo-700 rounded-xl font-bold text-xs transition-all disabled:opacity-50"
+                  className="px-6 py-3 bg-indigo-500 hover:bg-indigo-600 text-white border border-indigo-600 rounded-xl font-bold text-xs transition-all disabled:opacity-40 hover:shadow-lg active:scale-95"
                 >
                   Schedule
                 </button>
                 <button
                   onClick={handleLaunch}
                   disabled={role === 'Viewer' || role === 'Analyst'}
-                  className="px-4.5 py-2 bg-indigo-600 hover:bg-indigo-750 text-white rounded-xl font-bold text-xs shadow-md transition-all flex items-center gap-1.5 animate-pulse disabled:opacity-50"
+                  className="px-7 py-3 bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800 text-white border border-indigo-700 rounded-xl font-bold text-xs shadow-lg transition-all flex items-center gap-2.5 disabled:opacity-40 hover:shadow-xl active:scale-95"
                 >
-                  <span className="material-symbols-outlined text-[15px]">rocket_launch</span>
-                  Approve & Launch
+                  <span className="material-symbols-outlined text-[17px]">rocket_launch</span>
+                  <span>Approve & Launch</span>
                 </button>
               </div>
             </div>
