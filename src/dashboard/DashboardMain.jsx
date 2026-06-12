@@ -29,6 +29,8 @@ export default function DashboardMain({ user, onBack }) {
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
   const [copilotPrompt, setCopilotPrompt] = useState('');
+  const [loadedWorkspaceId, setLoadedWorkspaceId] = useState('');
+  const [skeletonLoading, setSkeletonLoading] = useState(false);
 
   // Floating Copilot Handlers
   const [isFloatingCopilotOpen, setIsFloatingCopilotOpen] = useState(false);
@@ -95,11 +97,22 @@ export default function DashboardMain({ user, onBack }) {
   const [activeCustomerId, setActiveCustomerId] = useState(null);
 
   const lastLoadedWorkspaceIdRef = useRef('');
+  const campaignsRef = useRef([]);
+  const customersRef = useRef([]);
+
+  useEffect(() => {
+    campaignsRef.current = campaigns;
+  }, [campaigns]);
+
+  useEffect(() => {
+    customersRef.current = customers;
+  }, [customers]);
 
   // Switch Workspace effect (Loads data from pool on switch)
   useEffect(() => {
     if (workspaces.length === 0) {
       setActiveWorkspaceId('');
+      setLoadedWorkspaceId('');
       localStorage.removeItem('xeno_active_workspace_id');
       return;
     }
@@ -113,6 +126,7 @@ export default function DashboardMain({ user, onBack }) {
 
     const ws = workspaces.find(w => w.id === targetId);
     if (ws) {
+      setSkeletonLoading(true);
       lastLoadedWorkspaceIdRef.current = targetId;
       setCustomers(ws.customers || []);
       setCampaigns(ws.campaigns || []);
@@ -125,13 +139,20 @@ export default function DashboardMain({ user, onBack }) {
         lastUpload: ws.lastUpload || 'Just Now',
         lastRefresh: ws.lastRefresh || 'Just Now'
       });
+
+      const timer = setTimeout(() => {
+        setLoadedWorkspaceId(targetId);
+        setSkeletonLoading(false);
+      }, 700);
+
+      return () => clearTimeout(timer);
     }
   }, [activeWorkspaceId, workspaces]);
 
   // Save local state changes back to workspaces pool
   useEffect(() => {
     if (!activeWorkspaceId || workspaces.length === 0) return;
-    if (lastLoadedWorkspaceIdRef.current !== activeWorkspaceId) return;
+    if (loadedWorkspaceId !== activeWorkspaceId) return;
 
     setWorkspaces(prev => {
       let changed = false;
@@ -171,7 +192,7 @@ export default function DashboardMain({ user, onBack }) {
       }
       return prev;
     });
-  }, [activeWorkspaceId, customers, campaigns, kpis, simMetrics, simLogs, notifications, workspaceTimestamps]);
+  }, [activeWorkspaceId, loadedWorkspaceId, customers, campaigns, kpis, simMetrics, simLogs, notifications, workspaceTimestamps]);
 
   // Notification helper
   const addNotification = (text, type = 'info') => {
@@ -403,12 +424,12 @@ export default function DashboardMain({ user, onBack }) {
     if (isPaused || workspaces.length === 0 || !activeWorkspaceId) return;
 
     const interval = setInterval(() => {
-      const runningCamps = campaigns.filter(c => c.status === 'Running');
+      const runningCamps = campaignsRef.current.filter(c => c.status === 'Running');
       if (runningCamps.length === 0) return;
 
       const selectedCamp = runningCamps[Math.floor(Math.random() * runningCamps.length)];
-      if (customers.length === 0) return;
-      const randomCust = customers[Math.floor(Math.random() * customers.length)];
+      if (customersRef.current.length === 0) return;
+      const randomCust = customersRef.current[Math.floor(Math.random() * customersRef.current.length)];
       
       const rand = Math.random();
       let eventType = 'Delivered';
@@ -537,7 +558,7 @@ export default function DashboardMain({ user, onBack }) {
     }, simSpeed * 1000);
 
     return () => clearInterval(interval);
-  }, [campaigns, customers, isPaused, simSpeed, workspaces, activeWorkspaceId]);
+  }, [isPaused, simSpeed, activeWorkspaceId, workspaces.length]);
 
   // View Navigation Helpers
   const handleNavigateView = (viewId) => {
@@ -652,6 +673,7 @@ export default function DashboardMain({ user, onBack }) {
           onDismissNotification={handleDismissNotification}
           onClearAllNotifications={handleClearAllNotifications}
           onToggleMobileSidebar={() => setIsMobileSidebarOpen(prev => !prev)}
+          isLoading={skeletonLoading}
         />
 
         {/* 3. Main Workspace Area */}
@@ -673,6 +695,7 @@ export default function DashboardMain({ user, onBack }) {
                   logs={simLogs}
                   campaigns={campaigns}
                   role={role}
+                  isLoading={skeletonLoading}
                 />
               } 
             />

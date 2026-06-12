@@ -10,7 +10,8 @@ export default function DashboardOverview({
   timestamps = { lastAnalysis: 'Just Now', lastUpload: 'Just Now', lastRefresh: 'Just Now' },
   logs = [],
   campaigns = [],
-  role = 'Admin'
+  role = 'Admin',
+  isLoading = false
 }) {
   const [activeSegment, setActiveSegment] = useState(mockSegments[0]);
   const [hoveredNode, setHoveredNode] = useState(null);
@@ -89,6 +90,82 @@ export default function DashboardOverview({
       actionView: 'analytics'
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="space-y-10 animate-pulse pb-12 select-none">
+        {/* Workspace Health & Status Bar Skeleton */}
+        <div className="flex flex-wrap items-center justify-between gap-4 bg-white/70 border border-gray-200/50 rounded-[2rem] px-8 py-4.5 shadow-sm backdrop-blur-md">
+          <div className="h-4 w-32 bg-gray-200 rounded-full"></div>
+          <div className="h-4 w-40 bg-gray-200 rounded-full hidden md:block"></div>
+          <div className="h-4 w-48 bg-gray-200 rounded-full hidden md:block"></div>
+          <div className="h-4 w-28 bg-gray-200 rounded-full hidden md:block"></div>
+          <div className="h-4 w-24 bg-gray-200 rounded-full"></div>
+        </div>
+
+        {/* 1. AI MISSION CONTROL HERO PANEL Skeleton */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+          <div className="lg:col-span-7 bg-white/85 border border-gray-200/60 px-8 py-8 rounded-[2rem] shadow-xl flex flex-col justify-between min-h-[350px]">
+            <div className="space-y-4">
+              <div className="h-3 w-36 bg-gray-200 rounded-full"></div>
+              <div className="h-8 w-[80%] bg-gray-200 rounded-lg"></div>
+              <div className="h-8 w-[60%] bg-gray-200 rounded-lg"></div>
+              <div className="space-y-2 pt-2">
+                <div className="h-3.5 w-full bg-gray-200 rounded-full"></div>
+                <div className="h-3.5 w-[90%] bg-gray-200 rounded-full"></div>
+              </div>
+            </div>
+            <div className="h-12 w-48 bg-indigo-100 rounded-xl mt-6"></div>
+          </div>
+
+          <div className="lg:col-span-5 bg-white/75 border border-indigo-100/80 p-8 rounded-[2.5rem] shadow-xl flex flex-col justify-center items-center min-h-[350px]">
+            <div className="w-48 h-48 rounded-full border-4 border-gray-100 flex items-center justify-center">
+              <div className="w-32 h-32 rounded-full border-4 border-gray-200 flex items-center justify-center">
+                <div className="w-16 h-16 rounded-full bg-gray-200"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* 2. METRIC CAPSULES Skeleton */}
+        <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4">
+          {[1, 2, 3, 4, 5, 6].map((idx) => (
+            <div key={idx} className="bg-white p-5 rounded-[2rem] shadow-[0_4px_20px_rgba(0,0,0,0.03)] flex flex-col justify-between min-h-[110px]">
+              <div className="flex justify-between items-center mb-4">
+                <div className="h-3 w-16 bg-gray-200 rounded-full"></div>
+                <div className="h-4 w-10 bg-gray-100 rounded-full"></div>
+              </div>
+              <div className="flex justify-between items-end">
+                <div className="h-6 w-20 bg-gray-250 rounded-lg"></div>
+                <div className="h-4 w-12 bg-gray-200 rounded-full"></div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* 3. AI PRIORITY ACTIONS Skeleton */}
+        <div>
+          <div className="h-6 w-48 bg-gray-200 rounded-full mb-6"></div>
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+            {[1, 2, 3].map((idx) => (
+              <div key={idx} className="bg-white p-6 rounded-[2rem] shadow-sm flex flex-col justify-between min-h-[220px]">
+                <div className="flex justify-between mb-4">
+                  <div className="h-4 w-24 bg-gray-200 rounded-md"></div>
+                  <div className="h-4 w-16 bg-gray-100 rounded-md"></div>
+                </div>
+                <div className="space-y-2 mb-6">
+                  <div className="h-5 w-40 bg-gray-250 rounded-md"></div>
+                  <div className="h-3.5 w-full bg-gray-200 rounded-full"></div>
+                  <div className="h-3.5 w-[80%] bg-gray-200 rounded-full"></div>
+                </div>
+                <div className="h-10 w-full bg-gray-100 rounded-xl"></div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-10 animate-in fade-in duration-500 pb-12 select-none">
@@ -354,10 +431,13 @@ export default function DashboardOverview({
             'Campaign Attributed Rev': 'ROI: 4.2x'
           };
 
+          const details = kpiDetails[kpi.label] || {};
+          const glowClass = details.glowClass || 'card-top-glow-indigo';
+
           return (
             <div 
               key={idx} 
-              className="group/kpi bg-white p-5 rounded-[2rem] shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.08)] transition-all duration-300 flex flex-col justify-between min-h-[110px] premium-hover-lift relative overflow-hidden"
+              className={`group/kpi bg-white/85 border border-white/60 backdrop-blur-md p-5 rounded-[2rem] shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.08)] transition-all duration-300 flex flex-col justify-between min-h-[110px] premium-hover-lift relative overflow-hidden ${glowClass}`}
             >
               <div className="absolute inset-0 bg-gradient-to-br from-indigo-50/0 to-indigo-50/0 group-hover/kpi:from-indigo-50/40 group-hover/kpi:to-purple-50/10 transition-colors duration-500 z-0 pointer-events-none"></div>
               

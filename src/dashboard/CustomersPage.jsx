@@ -1,8 +1,17 @@
 import React, { useState, useMemo, useEffect } from 'react';
 
 export default function CustomersPage({ customers, activeCustomerId, clearActiveCustomerId }) {
-  // Local state for filters
+  const [inputValue, setInputValue] = useState('');
   const [search, setSearch] = useState('');
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setSearch(inputValue);
+    }, 200);
+
+    return () => clearTimeout(timer);
+  }, [inputValue]);
+
   const [cityFilter, setCityFilter] = useState('');
   const [frequencyFilter, setFrequencyFilter] = useState('');
   const [spendFilter, setSpendFilter] = useState('');
@@ -92,8 +101,8 @@ export default function CustomersPage({ customers, activeCustomerId, clearActive
             <span className="material-symbols-outlined absolute left-3 text-[18px] text-gray-400">search</span>
             <input
               type="text"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
               placeholder="Search by name, email, ID..."
               className="w-full pl-10 pr-4 py-2.5 text-xs bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-100 transition-all font-semibold"
             />
@@ -172,10 +181,11 @@ export default function CustomersPage({ customers, activeCustomerId, clearActive
           </div>
 
           {/* Clear Filters button */}
-          {(search || cityFilter || frequencyFilter || spendFilter || dateFilter || channelFilter) && (
+          {(inputValue || search || cityFilter || frequencyFilter || spendFilter || dateFilter || channelFilter) && (
             <div className="col-span-1 md:col-span-3 lg:col-span-6 flex justify-end">
               <button
                 onClick={() => {
+                  setInputValue('');
                   setSearch('');
                   setCityFilter('');
                   setFrequencyFilter('');
@@ -227,21 +237,21 @@ export default function CustomersPage({ customers, activeCustomerId, clearActive
 
                   return (
                     <tr key={cust.id} className="hover:bg-gray-50/50 transition-colors">
-                      <td className="px-6 py-4">
+                       <td className="px-6 py-4 max-w-[200px]">
                         <div className="flex items-center gap-3">
                           <img
                             alt={cust.name}
-                            className="w-8 h-8 rounded-full bg-indigo-50 border border-gray-150 object-cover"
+                            className="w-8 h-8 rounded-full bg-indigo-50 border border-gray-150 object-cover shrink-0"
                             src={`https://api.dicebear.com/7.x/initials/svg?seed=${cust.name}`}
                           />
-                          <div>
-                            <p className="font-bold text-gray-900">{cust.name}</p>
-                            <span className="text-[10px] text-gray-400 font-bold uppercase">{cust.id}</span>
+                          <div className="min-w-0">
+                            <p className="font-bold text-gray-900 truncate" title={cust.name}>{cust.name}</p>
+                            <span className="text-[10px] text-gray-400 font-bold uppercase block truncate">{cust.id}</span>
                           </div>
                         </div>
                       </td>
-                      <td className="px-6 py-4">
-                        <p>{cust.email}</p>
+                      <td className="px-6 py-4 max-w-[180px]">
+                        <p className="truncate font-semibold text-gray-700" title={cust.email}>{cust.email}</p>
                         <p className="text-[10px] text-gray-400 font-bold">{cust.phone}</p>
                       </td>
                       <td className="px-6 py-4 text-gray-600">{cust.city}</td>

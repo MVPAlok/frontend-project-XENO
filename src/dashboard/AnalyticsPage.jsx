@@ -286,7 +286,7 @@ export default function AnalyticsPage({ campaigns = [] }) {
                 <XAxis dataKey="name" stroke="#9ca3af" fontSize={10} tickLine={false} />
                 <YAxis stroke="#9ca3af" fontSize={10} tickLine={false} />
                 <Tooltip content={<CustomTooltip />} />
-                <Bar dataKey="revenue" name="Revenue Generated" fill="#6b4cff" radius={[10, 10, 0, 0]} barSize={35} />
+                <Bar dataKey="revenue" name="Revenue Generated" fill="#6b4cff" radius={[10, 10, 0, 0]} barSize={35} isAnimationActive={false} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -312,10 +312,10 @@ export default function AnalyticsPage({ campaigns = [] }) {
                 <YAxis stroke="#9ca3af" fontSize={10} tickLine={false} />
                 <Tooltip content={<CustomTooltip />} />
                 <Legend iconSize={8} iconType="circle" wrapperStyle={{ fontSize: 10, fontWeight: 'bold' }} />
-                <Bar dataKey="deliveryRate" name="Delivery %" fill="#3b82f6" radius={[4, 4, 0, 0]} />
-                <Bar dataKey="readRate" name="Read %" fill="#fb8c00" radius={[4, 4, 0, 0]} />
-                <Bar dataKey="clickRate" name="Click %" fill="#ec4899" radius={[4, 4, 0, 0]} />
-                <Bar dataKey="conversionRate" name="Conversion %" fill="#10b981" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="deliveryRate" name="Delivery %" fill="#3b82f6" radius={[4, 4, 0, 0]} isAnimationActive={false} />
+                <Bar dataKey="readRate" name="Read %" fill="#fb8c00" radius={[4, 4, 0, 0]} isAnimationActive={false} />
+                <Bar dataKey="clickRate" name="Click %" fill="#ec4899" radius={[4, 4, 0, 0]} isAnimationActive={false} />
+                <Bar dataKey="conversionRate" name="Conversion %" fill="#10b981" radius={[4, 4, 0, 0]} isAnimationActive={false} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -378,6 +378,7 @@ export default function AnalyticsPage({ campaigns = [] }) {
                   strokeWidth={2.5}
                   fillOpacity={1} 
                   fill="url(#colorTrend)" 
+                  isAnimationActive={false}
                 />
               </AreaChart>
             </ResponsiveContainer>

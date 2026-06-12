@@ -263,7 +263,7 @@ export default function GrowthStudioPage({ initialPrompt, onLaunchCampaign, role
             <button
               type="submit"
               disabled={thinking || !prompt.trim() || role === 'Viewer'}
-              className="px-6 py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold text-xs shadow-md transition-all hover:scale-[1.01] disabled:opacity-50 flex items-center gap-2"
+              className="px-6 py-3.5 creative-btn rounded-xl font-bold text-xs disabled:opacity-50 flex items-center gap-2"
             >
               {thinking ? (
                 <>
@@ -288,7 +288,7 @@ export default function GrowthStudioPage({ initialPrompt, onLaunchCampaign, role
                 setPrompt("Bring back customers who have not purchased in 3 months.");
                 triggerAISimulation("Bring back customers who have not purchased in 3 months.");
               }}
-              className="px-3 py-1.5 bg-indigo-50/50 hover:bg-indigo-50 text-indigo-650 rounded-xl font-bold text-[10px] border border-indigo-100/50 transition-colors"
+              className="px-3 py-1.5 bg-indigo-50/50 hover:bg-indigo-50 text-indigo-600 rounded-xl font-bold text-[10px] border border-indigo-100/50 transition-colors"
             >
               Re-engage 90-day inactive shoppers
             </button>
@@ -298,7 +298,7 @@ export default function GrowthStudioPage({ initialPrompt, onLaunchCampaign, role
                 setPrompt("Promote early access sale to VIP customers who spent more than ₹10,000 last month.");
                 triggerAISimulation("Promote early access sale to VIP customers who spent more than ₹10,000 last month.");
               }}
-              className="px-3 py-1.5 bg-purple-50/50 hover:bg-purple-50 text-purple-655 rounded-xl font-bold text-[10px] border border-purple-100/50 transition-colors"
+              className="px-3 py-1.5 bg-purple-50/50 hover:bg-purple-50 text-purple-600 rounded-xl font-bold text-[10px] border border-purple-100/50 transition-colors"
             >
               VIP high-spender campaign
             </button>

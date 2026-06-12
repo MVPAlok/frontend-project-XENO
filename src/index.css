@@ -37,6 +37,7 @@
   .gradient-text {
     background: linear-gradient(135deg, #3525cd 0%, #4f46e5 100%);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
   }
 
@@ -51,6 +52,7 @@
   .hero-gradient-text {
     background: linear-gradient(135deg, #4f46e5 0%, #ec4899 50%, #f43f5e 100%);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     background-size: 200% 200%;
     animation: text-shimmer 4s ease-in-out infinite alternate;
@@ -279,9 +281,7 @@
     animation: dash 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
 
-  .cyber-grid {
-    /* Grid removed per user request for cleaner aesthetic */
-  }
+  /* Grid removed per user request for cleaner aesthetic */
 
   /* Shimmer effect for borders */
   .border-glow-indigo:hover {
