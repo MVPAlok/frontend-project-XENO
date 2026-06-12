@@ -109,7 +109,7 @@ export default function CampaignActivityCenter({
                 key={chan}
                 onClick={() => setChannelFilter(chan)}
                 className={`px-3 py-1 rounded-lg text-[9px] font-black transition-all ${
-                  channelFilter === chan ? 'bg-indigo-650 text-white shadow-md' : 'text-gray-500 hover:text-gray-300'
+                  channelFilter === chan ? 'bg-indigo-600 text-white shadow-md' : 'text-gray-500 hover:text-gray-300'
                 }`}
               >
                 {chan}

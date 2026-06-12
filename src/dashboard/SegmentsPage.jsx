@@ -81,6 +81,7 @@ const segmentCRMDetails = {
 
 export default function SegmentsPage({ onNavigateToView, onGenerateCampaign, segments = mockSegments }) {
   const [hoveredCardId, setHoveredCardId] = useState(null);
+  const [expandedSegmentId, setExpandedSegmentId] = useState(null);
   
   const handleViewCustomers = (segment) => {
     onNavigateToView('customers');
@@ -115,7 +116,7 @@ export default function SegmentsPage({ onNavigateToView, onGenerateCampaign, seg
       </div>
 
       {/* Segments Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
         {segments.map((segment) => {
           const details = segmentDetails[segment.id] || {
             rule: 'Custom filter rules',
@@ -131,152 +132,135 @@ export default function SegmentsPage({ onNavigateToView, onGenerateCampaign, seg
           };
 
           const isHovered = hoveredCardId === segment.id;
+          const isExpanded = expandedSegmentId === segment.id;
 
           return (
             <div
               key={segment.id}
               onMouseEnter={() => setHoveredCardId(segment.id)}
               onMouseLeave={() => setHoveredCardId(null)}
-              className="bg-white border border-gray-250/65 rounded-[2.5rem] p-6 shadow-sm transition-all duration-300 relative group flex flex-col justify-between"
-              style={{
-                transform: isHovered ? 'translateY(-6px)' : 'translateY(0)',
-                boxShadow: isHovered 
-                  ? `0 20px 40px ${segment.color}15, 0 0 0 1px ${segment.color}`
-                  : '0 4px 20px rgba(0,0,0,0.015)',
-                borderColor: isHovered ? segment.color : '#e5e7eb'
-              }}
+              className="bg-white border border-gray-200 p-6 rounded-[2.5rem] shadow-[0_4px_20px_rgba(0,0,0,0.02)] transition-all duration-300 premium-hover-lift flex flex-col justify-between hover:shadow-[0_12px_30px_rgba(79,70,229,0.08)] hover:border-indigo-200"
             >
-              {/* Colored header line matching segment design */}
-              <div 
-                className="absolute left-0 top-6 bottom-6 w-1 rounded-r-lg transition-transform duration-350" 
-                style={{ 
-                  backgroundColor: segment.color,
-                  transform: isHovered ? 'scaleY(1.08)' : 'scaleY(1)'
-                }}
-              />
-
-              <div className="space-y-4">
-                {/* Header */}
-                <div className="flex justify-between items-start">
-                  <div className="text-left">
-                    <h3 className="text-sm font-extrabold text-gray-950">{segment.name}</h3>
-                    <span className={`inline-block mt-1 px-2.5 py-0.5 text-[9px] font-black rounded-md border ${
+              <div>
+                {/* Header Row */}
+                <div className="flex justify-between items-start mb-4">
+                  <div className="text-left space-y-1">
+                    <span className={`text-[9px] font-black px-2.5 py-1 rounded-md uppercase tracking-wider ${
                       details.source === 'AI Generated' 
-                        ? 'bg-indigo-50 border-indigo-100/50 text-indigo-700' 
-                        : 'bg-amber-50 border-amber-100/50 text-amber-700'
+                        ? 'bg-indigo-50 text-indigo-600' 
+                        : 'bg-amber-50 text-amber-700'
                     }`}>
                       {details.source}
                     </span>
+                    <h3 className="text-base font-bold text-gray-950 pt-1">{segment.name}</h3>
                   </div>
-                  <span className="text-[10px] font-bold bg-gray-50 border border-gray-150 text-gray-550 px-2 py-0.5 rounded-md">
-                    {segment.count} customers
-                  </span>
+                  
+                  {/* Confidence Ring */}
+                  <div className="relative w-11 h-11 shrink-0" title="AI Confidence Score">
+                    <svg className="w-full h-full -rotate-90" viewBox="0 0 36 36">
+                      <path className="text-gray-100" strokeWidth="3" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                      <path 
+                        className="text-indigo-600" 
+                        strokeDasharray={`${segment.confidenceScore}, 100`} 
+                        strokeWidth="3" 
+                        strokeLinecap="round" 
+                        stroke="currentColor" 
+                        fill="none" 
+                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" 
+                      />
+                    </svg>
+                    <div className="absolute inset-0 flex items-center justify-center text-[10px] font-black text-gray-900">
+                      {segment.confidenceScore}%
+                    </div>
+                  </div>
                 </div>
 
-                {/* Description */}
-                <p className="text-xs text-gray-450 font-semibold leading-relaxed text-left">
+                {/* Subtitle Details */}
+                <p className="text-xs text-gray-500 leading-relaxed text-left font-medium mb-5">
                   {segment.description}
                 </p>
 
-                {/* Preview Members List */}
-                <div className="bg-gray-50/50 border border-gray-150 p-3 rounded-2xl text-[10px] text-gray-600 text-left">
-                  <span className="text-gray-400 font-bold block uppercase tracking-wider mb-1">Preview Members</span>
-                  <div className="flex flex-wrap gap-1.5 mt-1.5">
+                {/* Cohort Insights */}
+                <div className="flex flex-col gap-3 mb-5 border-b border-gray-100/60 pb-5">
+                  {/* Preview Members */}
+                  <div className="flex flex-wrap gap-1.5 justify-start">
+                    <span className="text-gray-400 font-bold block uppercase text-[8px] tracking-widest w-full text-left mb-0.5">Preview Members</span>
                     {crmDetails.members.map(m => (
-                      <span key={m} className="bg-white border border-gray-150 px-2 py-0.5 rounded-lg font-bold text-gray-700">{m}</span>
+                      <span key={m} className="bg-white border border-gray-200 px-2 py-0.5 rounded-md font-bold text-[9px] text-gray-600 shadow-sm">{m}</span>
                     ))}
                   </div>
-                </div>
 
-                {/* Segment Relationships & Trends */}
-                <div className="space-y-2 border-t border-gray-100 pt-3 text-left">
-                  <div className="flex justify-between items-center text-[10px] font-semibold text-gray-500">
-                    <span className="text-gray-400 font-bold uppercase tracking-wider">Overlap Cohorts</span>
-                    <span className="font-extrabold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded-md flex items-center gap-0.5">
+                  <div className="flex items-center gap-2">
+                    <span className="font-extrabold text-[9px] text-indigo-700 bg-indigo-50 px-2 py-1 rounded-md flex items-center gap-1">
                       <span className="material-symbols-outlined text-[12px]">join_inner</span>
                       {crmDetails.overlap}
                     </span>
-                  </div>
-                  <div className="flex justify-between items-center text-[10px] font-semibold text-gray-500">
-                    <span className="text-gray-400 font-bold uppercase tracking-wider">30D Trend</span>
-                    <span className="font-extrabold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md">
+                    <span className="font-extrabold text-[9px] text-emerald-700 bg-emerald-50 px-2 py-1 rounded-md flex items-center gap-1">
+                      <span className="material-symbols-outlined text-[12px]">trending_up</span>
                       {crmDetails.trend}
                     </span>
                   </div>
                 </div>
 
-                {/* Logic Rule */}
-                <div className="bg-gray-50 border border-gray-150 p-2.5 rounded-xl text-[10px] font-semibold text-gray-600 text-left">
-                  <span className="text-gray-400 font-bold block uppercase tracking-wider mb-0.5">Segment Logic Rule</span>
-                  <code className="text-indigo-600 font-mono text-[9px]">{details.rule}</code>
+                {/* Key Metrics */}
+                <div className="grid grid-cols-2 gap-4 my-5 bg-gray-50/50 border border-gray-100 p-4 rounded-2xl text-left">
+                  <div>
+                    <span className="block text-[8px] font-bold text-gray-400 uppercase tracking-widest mb-0.5">Revenue Opportunity</span>
+                    <span className="text-xl font-extrabold text-indigo-700">₹{segment.revenuePotential.toLocaleString()}</span>
+                  </div>
+                  <div>
+                    <span className="block text-[8px] font-bold text-gray-400 uppercase tracking-widest mb-0.5">Expected Conv.</span>
+                    <span className="text-xl font-extrabold text-emerald-600">{segment.expectedConversion}</span>
+                  </div>
                 </div>
 
-                {/* AI Explanation */}
-                <div className="border-l-2 border-indigo-200 pl-3 py-0.5 text-left">
-                  <span className="text-[9px] font-bold text-gray-400 uppercase tracking-wider block">Why AI Created This Segment</span>
-                  <p className="text-[10px] text-gray-500 font-semibold leading-relaxed italic mt-0.5">
-                    "{details.why}"
-                  </p>
-                </div>
-
-                {/* AI Confidence Meter */}
-                <div className="bg-indigo-50/20 p-3 rounded-2xl border border-indigo-100/50 text-left">
-                  <div className="flex justify-between items-center text-[10px] font-bold text-gray-500 mb-1.5">
+                {/* Why AI Discovered This Collapsed Section */}
+                <div className="border-t border-gray-100 pt-4">
+                  <button
+                    onClick={() => setExpandedSegmentId(isExpanded ? null : segment.id)}
+                    className="w-full flex items-center justify-between text-xs font-bold text-indigo-600 hover:text-indigo-800 transition-colors"
+                  >
                     <span className="flex items-center gap-1">
-                      <span className="material-symbols-outlined text-indigo-500 text-[13px] animate-pulse">smart_toy</span>
-                      AI Confidence Score
+                      <span className="material-symbols-outlined text-[16px] animate-pulse">auto_awesome</span>
+                      Why AI Discovered This
                     </span>
-                    <span className="text-indigo-650">{segment.confidenceScore}%</span>
-                  </div>
-                  <div className="w-full bg-gray-250 h-1.5 rounded-full overflow-hidden">
-                    <div 
-                      className="h-full bg-indigo-500 transition-all duration-1000" 
-                      style={{ width: `${segment.confidenceScore}%` }}
-                    />
-                  </div>
-                </div>
+                    <span className="material-symbols-outlined text-[18px]">
+                      {isExpanded ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}
+                    </span>
+                  </button>
 
-                {/* Segment metrics & Recommendations */}
-                <div className="grid grid-cols-2 gap-4 border-t border-gray-100 pt-4 text-xs font-semibold text-gray-650 text-left">
-                  <div>
-                    <span className="block text-[9px] font-bold text-gray-400 uppercase tracking-wider mb-0.5">Revenue Opportunity</span>
-                    <span className="text-sm font-extrabold text-gray-950">₹{segment.revenuePotential.toLocaleString()}</span>
-                  </div>
-                  <div>
-                    <span className="block text-[9px] font-bold text-gray-400 uppercase tracking-wider mb-0.5">Expected Conversion</span>
-                    <span className="text-sm font-extrabold text-emerald-600">{segment.expectedConversion}</span>
-                  </div>
-                  <div className="col-span-2 space-y-2 pt-2 border-t border-gray-50">
-                    <div className="flex justify-between items-center">
-                      <span className="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Recommended Campaign</span>
-                      <span className="text-[10px] font-extrabold text-indigo-950 truncate max-w-[140px]">{details.campaign}</span>
+                  {isExpanded && (
+                    <div className="mt-3.5 space-y-3 bg-indigo-50/10 border border-indigo-50 rounded-2xl p-4 text-left text-xs font-medium text-gray-600 animate-in slide-in-from-top-2 duration-300">
+                      <p className="font-bold text-indigo-950 uppercase text-[9px] tracking-wider mb-1">AI Reasoning Logs</p>
+                      <div className="flex gap-2 items-start">
+                        <span className="text-emerald-500 font-bold">✔</span>
+                        <span className="font-semibold text-gray-600 leading-relaxed italic">"{details.why}"</span>
+                      </div>
+                      
+                      <div className="pt-2.5 border-t border-indigo-100/50 mt-1">
+                        <p className="font-bold text-indigo-950 uppercase text-[9px] tracking-wider mb-1.5">Segment Logic Rule</p>
+                        <code className="text-indigo-600 font-mono text-[10px] font-bold bg-white border border-indigo-100 px-2 py-1 rounded-md">{details.rule}</code>
+                      </div>
                     </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Recommended Channel</span>
-                      <span className="text-[10px] font-extrabold text-emerald-600 flex items-center gap-0.5">
-                        <span className="material-symbols-outlined text-[12px]">chat</span>
-                        {details.channel}
-                      </span>
-                    </div>
-                  </div>
+                  )}
                 </div>
               </div>
 
-              {/* Action Buttons */}
-              <div className="grid grid-cols-2 gap-3 mt-5">
+              {/* Action Bar */}
+              <div className="mt-6 pt-4 border-t border-gray-100 flex items-center justify-between gap-3">
                 <button
                   onClick={() => handleViewCustomers(segment)}
-                  className="w-full py-2.5 border border-gray-200 hover:bg-gray-50 text-gray-750 rounded-xl font-bold text-xs transition-all hover:scale-[1.01] flex items-center justify-center gap-1.5"
+                  className="px-4 py-2.5 border border-gray-200 hover:bg-gray-50 text-gray-700 rounded-xl font-bold text-[11px] transition-all hover:scale-[1.02] flex items-center gap-1.5 flex-1 justify-center"
                 >
-                  <span className="material-symbols-outlined text-[16px]">visibility</span>
+                  <span className="material-symbols-outlined text-[15px]">visibility</span>
                   View List
                 </button>
                 
                 <button
                   onClick={() => handleGenerateCampaign(segment)}
-                  className="w-full py-2.5 bg-indigo-650 hover:bg-indigo-750 text-white rounded-xl font-bold text-xs shadow-md transition-all hover:scale-[1.01] flex items-center justify-center gap-1.5"
+                  className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold text-[11px] shadow-md transition-all hover:scale-[1.02] flex items-center gap-1.5 flex-[1.5] justify-center"
                 >
-                  <span className="material-symbols-outlined text-[16px]">rocket_launch</span>
+                  <span className="material-symbols-outlined text-[15px]">rocket_launch</span>
                   Draft Campaign
                 </button>
               </div>

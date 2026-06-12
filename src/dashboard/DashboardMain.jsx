@@ -956,7 +956,7 @@ export default function DashboardMain({ user, onBack }) {
               />
               <button
                 type="submit"
-                className="w-8 h-8 flex items-center justify-center rounded-xl bg-indigo-650 hover:bg-indigo-800 text-white transition-colors"
+                className="w-8 h-8 flex items-center justify-center rounded-xl bg-indigo-600 hover:bg-indigo-800 text-white transition-colors"
               >
                 <span className="material-symbols-outlined text-[16px]">arrow_upward</span>
               </button>

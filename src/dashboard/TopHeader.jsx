@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import AiActivityCenter from './AiActivityCenter';
 
 export default function TopHeader({ 
   user, 
@@ -42,19 +43,17 @@ export default function TopHeader({
     return () => clearInterval(interval);
   }, []);
 
-  const unreadCount = notifications.filter(n => !n.read).length;
-
   return (
-    <header className="h-[5.5rem] shrink-0 bg-white/70 backdrop-blur-xl flex items-center justify-between px-8 sticky top-0 z-20 select-none relative">
+    <header className="h-[5.5rem] shrink-0 bg-white/70 backdrop-blur-xl flex items-center justify-between px-3 md:px-8 sticky top-0 z-20 select-none relative">
       {/* Faint bottom border gradient */}
       <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-indigo-200/30 via-purple-300/40 to-indigo-100/35" />
 
       {/* Brand & Store Selector */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2 md:gap-4">
         {/* Mobile Hamburger Menu */}
         <button 
           onClick={onToggleMobileSidebar}
-          className="lg:hidden p-2 -ml-2 text-gray-500 hover:text-gray-900 rounded-lg hover:bg-gray-100 transition-colors"
+          className="lg:hidden p-1.5 md:p-2 -ml-1 md:-ml-2 text-gray-500 hover:text-gray-900 rounded-lg hover:bg-gray-100 transition-colors"
         >
           <span className="material-symbols-outlined text-[24px]">menu</span>
         </button>
@@ -65,14 +64,14 @@ export default function TopHeader({
               setShowRoleDropdown(false);
               setShowNotificationDropdown(false);
             }}
-            className="flex items-center gap-2 px-3.5 py-2 border border-gray-200 rounded-xl bg-white hover:bg-gray-50 transition-all font-bold text-xs text-gray-750 shadow-xs premium-hover-lift"
+            className="flex items-center gap-1.5 md:gap-2 px-2.5 md:px-3.5 py-2 border border-gray-200 rounded-xl bg-white hover:bg-gray-50 transition-all font-bold text-[11px] md:text-xs text-gray-750 shadow-xs premium-hover-lift"
           >
-            <span className="material-symbols-outlined text-[16px] text-indigo-500">storefront</span>
-            <span className="truncate max-w-[120px]">
+            <span className="material-symbols-outlined text-[16px] text-indigo-500 hidden sm:block">storefront</span>
+            <span className="truncate max-w-[80px] sm:max-w-[120px]">
               {workspace ? workspace.brandName : 'No Workspace'}
             </span>
             {workspace && workspace.isArchived && (
-              <span className="text-[8px] bg-gray-100 text-gray-400 px-1 py-0.2 rounded font-extrabold ml-1 uppercase">Archived</span>
+              <span className="text-[8px] bg-gray-100 text-gray-400 px-1 py-0.2 rounded font-extrabold ml-1 uppercase hidden sm:inline-block">Archived</span>
             )}
             <span className="material-symbols-outlined text-[16px] text-gray-400">keyboard_arrow_down</span>
           </button>
@@ -301,81 +300,17 @@ export default function TopHeader({
         </button>
 
         {/* Notifications Popover */}
-        <div className="relative">
-          <button 
-            onClick={() => {
-              setShowNotificationDropdown(!showNotificationDropdown);
-              setShowWorkspaceDropdown(false);
-              setShowRoleDropdown(false);
-            }}
-            className="relative p-2.5 border border-gray-200 hover:bg-gray-50 rounded-xl transition-all shadow-xs text-gray-500"
-          >
-            <span className="material-symbols-outlined text-[20px]">notifications</span>
-            {unreadCount > 0 && (
-              <div className="absolute top-1.5 right-1.5 pointer-events-none">
-                <div className="absolute inset-0 bg-rose-500 rounded-full animate-pulse opacity-50" />
-                <div className="relative w-3.5 h-3.5 bg-rose-500 rounded-full flex items-center justify-center text-[8px] text-white font-black shadow-sm">
-                  {unreadCount}
-                </div>
-              </div>
-            )}
-          </button>
-
-          {showNotificationDropdown && (
-            <div className="absolute top-11 right-0 w-80 border border-gray-200/80 rounded-[2rem] bg-white shadow-2xl py-4 z-50 animate-in fade-in slide-in-from-top-2 duration-250 flex flex-col max-h-[400px] overflow-hidden">
-              <div className="px-5 pb-3 border-b border-gray-100 flex justify-between items-center shrink-0">
-                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Workspace Alerts</span>
-                {unreadCount > 0 && (
-                  <button 
-                    onClick={onClearAllNotifications}
-                    className="text-[10px] font-bold text-indigo-600 hover:text-indigo-805 transition-colors"
-                  >
-                    Clear All
-                  </button>
-                )}
-              </div>
-
-              <div className="flex-1 overflow-y-auto custom-scrollbar px-2 py-1.5 space-y-1.5 min-h-[100px]">
-                {notifications.length === 0 ? (
-                  <div className="h-28 flex flex-col items-center justify-center text-gray-400 italic text-xs">
-                    <span className="material-symbols-outlined text-[24px] text-gray-300 mb-1">notifications_off</span>
-                    No active notifications
-                  </div>
-                ) : (
-                  notifications.map((notif) => (
-                    <div 
-                      key={notif.id}
-                      className={`p-3 rounded-2xl border transition-all relative text-left flex items-start gap-2.5 ${
-                        notif.read 
-                          ? 'bg-gray-50/50 border-gray-150 text-gray-500' 
-                          : 'bg-indigo-50/15 border-indigo-100/60 text-gray-800'
-                      }`}
-                    >
-                      <span className={`material-symbols-outlined text-[16px] shrink-0 mt-0.5 ${
-                        notif.type === 'risk' ? 'text-rose-500' : notif.type === 'success' ? 'text-emerald-500' : 'text-indigo-500'
-                      }`}>
-                        {notif.type === 'risk' ? 'warning' : notif.type === 'success' ? 'verified' : 'info'}
-                      </span>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-[11px] font-bold leading-normal">{notif.text}</p>
-                        <span className="text-[9px] text-gray-400 block mt-1 font-semibold">{notif.time}</span>
-                      </div>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onDismissNotification(notif.id);
-                        }}
-                        className="text-gray-450 hover:text-gray-700 shrink-0 w-4 h-4 flex items-center justify-center rounded-full hover:bg-gray-200"
-                      >
-                        <span className="material-symbols-outlined text-[12px]">close</span>
-                      </button>
-                    </div>
-                  ))
-                )}
-              </div>
-            </div>
-          )}
-        </div>
+        <AiActivityCenter 
+          notifications={notifications}
+          onDismissNotification={onDismissNotification}
+          onClearAllNotifications={onClearAllNotifications}
+          isOpen={showNotificationDropdown}
+          onToggle={() => {
+            setShowNotificationDropdown(!showNotificationDropdown);
+            setShowWorkspaceDropdown(false);
+            setShowRoleDropdown(false);
+          }}
+        />
 
         {/* User Info */}
         <div className="flex items-center gap-2.5 pl-2 md:pl-3 border-l border-gray-200/50">

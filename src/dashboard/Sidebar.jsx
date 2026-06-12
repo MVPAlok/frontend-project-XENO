@@ -1,4 +1,5 @@
 import React from 'react';
+import Logo from '../components/Logo';
 
 export default function Sidebar({ 
   currentView, 
@@ -37,10 +38,8 @@ export default function Sidebar({
       {/* Brand Header */}
       <div className="h-[5.5rem] border-b border-gray-150/40 flex items-center px-6 gap-3 relative">
         <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-indigo-200/20 via-purple-200/30 to-indigo-100/20" />
-        <div className="p-2 bg-indigo-50 border border-indigo-100 rounded-xl">
-          <span className="material-symbols-outlined text-indigo-650 font-bold text-[24px]">
-            insights
-          </span>
+        <div className="flex items-center justify-center">
+          <Logo className="w-8 h-8 drop-shadow-md" />
         </div>
         <div className="text-left">
           <h1 className="text-sm font-black text-gray-905 leading-tight truncate max-w-[150px]">

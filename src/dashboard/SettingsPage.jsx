@@ -702,7 +702,7 @@ export default function SettingsPage({
                       onClick={() => handleIntegrationToggle('shopify')}
                       disabled={!canTriggerDataActions}
                       className={`w-11 h-6 rounded-full p-1 transition-colors flex ${
-                        integrations.shopify ? 'bg-indigo-650 justify-end' : 'bg-gray-200 justify-start'
+                        integrations.shopify ? 'bg-indigo-600 justify-end' : 'bg-gray-200 justify-start'
                       } disabled:opacity-40`}
                     >
                       <div className="w-4 h-4 rounded-full bg-white shadow-sm" />
@@ -722,7 +722,7 @@ export default function SettingsPage({
                       onClick={() => handleIntegrationToggle('salesforce')}
                       disabled={!canTriggerDataActions}
                       className={`w-11 h-6 rounded-full p-1 transition-colors flex ${
-                        integrations.salesforce ? 'bg-indigo-650 justify-end' : 'bg-gray-200 justify-start'
+                        integrations.salesforce ? 'bg-indigo-600 justify-end' : 'bg-gray-200 justify-start'
                       } disabled:opacity-40`}
                     >
                       <div className="w-4 h-4 rounded-full bg-white shadow-sm" />
@@ -742,7 +742,7 @@ export default function SettingsPage({
                       onClick={() => handleIntegrationToggle('hubspot')}
                       disabled={!canTriggerDataActions}
                       className={`w-11 h-6 rounded-full p-1 transition-colors flex ${
-                        integrations.hubspot ? 'bg-indigo-650 justify-end' : 'bg-gray-200 justify-start'
+                        integrations.hubspot ? 'bg-indigo-600 justify-end' : 'bg-gray-200 justify-start'
                       } disabled:opacity-40`}
                     >
                       <div className="w-4 h-4 rounded-full bg-white shadow-sm" />
@@ -762,7 +762,7 @@ export default function SettingsPage({
                       onClick={() => handleIntegrationToggle('segment')}
                       disabled={!canTriggerDataActions}
                       className={`w-11 h-6 rounded-full p-1 transition-colors flex ${
-                        integrations.segment ? 'bg-indigo-650 justify-end' : 'bg-gray-200 justify-start'
+                        integrations.segment ? 'bg-indigo-600 justify-end' : 'bg-gray-200 justify-start'
                       } disabled:opacity-40`}
                     >
                       <div className="w-4 h-4 rounded-full bg-white shadow-sm" />
@@ -1068,7 +1068,7 @@ export default function SettingsPage({
                     onClick={() => setAiSettings({ ...aiSettings, safetyFilter: !aiSettings.safetyFilter })}
                     disabled={!canModifyAi}
                     className={`w-11 h-6 rounded-full p-1 transition-colors flex ${
-                      aiSettings.safetyFilter ? 'bg-indigo-650 justify-end' : 'bg-gray-200 justify-start'
+                      aiSettings.safetyFilter ? 'bg-indigo-600 justify-end' : 'bg-gray-200 justify-start'
                     } disabled:opacity-40`}
                   >
                     <div className="w-4 h-4 rounded-full bg-white shadow-sm" />

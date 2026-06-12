@@ -257,7 +257,7 @@ export default function OnboardingWizard({ onComplete, initialStep = 1, onCancel
               <button
                 onClick={() => setStep(2)}
                 disabled={!brandName.trim()}
-                className="px-8 py-3.5 bg-indigo-600 hover:bg-indigo-750 text-white rounded-xl font-bold text-xs shadow-md transition-all hover:scale-[1.01] flex items-center gap-2 disabled:opacity-50"
+                className="px-8 py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold text-xs shadow-md transition-all hover:scale-[1.01] flex items-center gap-2 disabled:opacity-50"
               >
                 Create Workspace
                 <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
@@ -550,7 +550,7 @@ export default function OnboardingWizard({ onComplete, initialStep = 1, onCancel
             <div className="flex justify-end pt-6 border-t border-gray-100">
               <button
                 onClick={handleLaunch}
-                className="px-8 py-3.5 bg-indigo-600 hover:bg-indigo-750 text-white rounded-xl font-bold text-xs shadow-md transition-all hover:scale-[1.01] flex items-center gap-2"
+                className="px-8 py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold text-xs shadow-md transition-all hover:scale-[1.01] flex items-center gap-2"
               >
                 Launch AI Workspace
                 <span className="material-symbols-outlined text-[16px]">rocket_launch</span>

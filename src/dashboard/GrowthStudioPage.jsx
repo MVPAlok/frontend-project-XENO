@@ -252,7 +252,7 @@ export default function GrowthStudioPage({ initialPrompt, onLaunchCampaign, role
             <span className="material-symbols-outlined text-indigo-500 animate-pulse text-[18px]">smart_toy</span>
             <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Describe your marketing goal...</label>
           </div>
-          <div className="flex gap-3">
+          <div className="flex flex-col sm:flex-row gap-3">
             <input
               type="text"
               value={prompt}
@@ -263,7 +263,7 @@ export default function GrowthStudioPage({ initialPrompt, onLaunchCampaign, role
             <button
               type="submit"
               disabled={thinking || !prompt.trim() || role === 'Viewer'}
-              className="px-6 py-3.5 creative-btn rounded-xl font-bold text-xs disabled:opacity-50 flex items-center gap-2"
+              className="w-full sm:w-auto justify-center px-6 py-3.5 creative-btn rounded-xl font-bold text-xs disabled:opacity-50 flex items-center gap-2"
             >
               {thinking ? (
                 <>
@@ -585,7 +585,7 @@ export default function GrowthStudioPage({ initialPrompt, onLaunchCampaign, role
                   setSuccessData(null);
                   navigate('/dashboard/campaigns');
                 }}
-                className="w-full py-3 bg-indigo-600 hover:bg-indigo-750 text-white rounded-xl font-bold text-xs shadow-md transition-all"
+                className="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold text-xs shadow-md transition-all"
               >
                 Go to Campaigns
               </button>

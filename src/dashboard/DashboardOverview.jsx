@@ -521,7 +521,7 @@ export default function DashboardOverview({
             <button
               onClick={handleGenerateWinback}
               disabled={role === 'Viewer'}
-              className="relative z-10 w-full py-3 bg-amber-550 hover:bg-amber-650 disabled:opacity-50 text-white font-bold text-xs rounded-xl transition-all shadow-md active:scale-95"
+              className="relative z-10 w-full py-3 bg-amber-500 hover:bg-amber-600 disabled:opacity-50 text-white font-bold text-xs rounded-xl transition-all shadow-md active:scale-95"
             >
               Launch Win-Back Campaign
             </button>
@@ -559,7 +559,7 @@ export default function DashboardOverview({
             <button
               onClick={() => onGenerateCampaign("Draft a high-converting retention campaign for 185 at-risk customers.")}
               disabled={role === 'Viewer'}
-              className="relative z-10 w-full py-3 bg-indigo-650 hover:bg-indigo-800 disabled:opacity-50 text-white font-bold text-xs rounded-xl transition-all shadow-md active:scale-95"
+              className="relative z-10 w-full py-3 bg-indigo-600 hover:bg-indigo-800 disabled:opacity-50 text-white font-bold text-xs rounded-xl transition-all shadow-md active:scale-95"
             >
               Create Retention Campaign
             </button>
@@ -597,7 +597,7 @@ export default function DashboardOverview({
             <button
               onClick={handleGenerateVIP}
               disabled={role === 'Viewer'}
-              className="relative z-10 w-full py-3 bg-purple-650 hover:bg-purple-800 disabled:opacity-50 text-white font-bold text-xs rounded-xl transition-all shadow-md active:scale-95"
+              className="relative z-10 w-full py-3 bg-purple-600 hover:bg-purple-800 disabled:opacity-50 text-white font-bold text-xs rounded-xl transition-all shadow-md active:scale-95"
             >
               Generate VIP Campaign
             </button>
