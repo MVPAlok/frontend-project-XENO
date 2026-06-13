@@ -90,7 +90,7 @@ export default function DashboardMain({ user, onBack }) {
     converted: 88
   });
   const [simLogs, setSimLogs] = useState([]);
-  const [isPaused, setIsPaused] = useState(false);
+  const [isPaused, setIsPaused] = useState(true);
   const [simSpeed, setSimSpeed] = useState(4); // seconds per event
 
   const [activeCampaignId, setActiveCampaignId] = useState(null);

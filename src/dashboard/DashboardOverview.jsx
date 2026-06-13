@@ -441,8 +441,8 @@ export default function DashboardOverview({
             >
               <div className="absolute inset-0 bg-gradient-to-br from-indigo-50/0 to-indigo-50/0 group-hover/kpi:from-indigo-50/40 group-hover/kpi:to-purple-50/10 transition-colors duration-500 z-0 pointer-events-none"></div>
               
-              <div className="flex justify-between items-center mb-4 relative z-10">
-                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest truncate mr-2 transition-colors group-hover/kpi:text-indigo-600">
+              <div className="flex justify-between items-start mb-3 relative z-10">
+                <span className="text-[11px] font-semibold text-gray-500 uppercase tracking-wide line-clamp-2 pr-2 transition-colors group-hover/kpi:text-indigo-600 leading-tight">
                   {kpi.label}
                 </span>
                 <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 transition-all duration-300 group-hover/kpi:scale-110 ${
@@ -453,13 +453,13 @@ export default function DashboardOverview({
               </div>
 
               <div className="flex justify-between items-end relative z-10">
-                <h3 className="text-2xl font-bold text-gray-900 leading-none relative">
-                  <span className="block group-hover/kpi:opacity-0 group-hover/kpi:-translate-y-4 transition-all duration-300 absolute inset-0">{kpi.value}</span>
-                  <span className="block opacity-0 translate-y-4 group-hover/kpi:opacity-100 group-hover/kpi:translate-y-0 transition-all duration-300 text-indigo-700">{hoverMetrics[kpi.label]}</span>
+                <h3 className="text-xl xl:text-2xl font-bold text-gray-900 leading-none relative">
+                  <span className="block group-hover/kpi:opacity-0 group-hover/kpi:-translate-y-4 transition-all duration-300 absolute inset-0 whitespace-nowrap">{kpi.value}</span>
+                  <span className="block opacity-0 translate-y-4 group-hover/kpi:opacity-100 group-hover/kpi:translate-y-0 transition-all duration-300 text-indigo-700 whitespace-nowrap">{hoverMetrics[kpi.label]}</span>
                   <span className="invisible">{kpi.value}</span> {/* spacer */}
                 </h3>
-                <div className="w-[48px] h-[22px] shrink-0 opacity-70 group-hover/kpi:opacity-100 transition-opacity">
-                  <svg className="w-full h-full" viewBox="0 0 60 30">
+                <div className="w-[72px] h-[36px] shrink-0 opacity-100 group-hover/kpi:scale-105 transition-all duration-300">
+                  <svg className="w-full h-full drop-shadow-sm" viewBox="0 0 60 30">
                     <path 
                       d={sparklinePath} 
                       fill="none" 
